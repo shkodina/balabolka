@@ -42,3 +42,4 @@ balabolka_f103rtc\main.o: ../Middlewares/Third_Party/FatFs/src/ff_gen_drv.h
 balabolka_f103rtc\main.o: ../Middlewares/Third_Party/FatFs/src/diskio.h
 balabolka_f103rtc\main.o: ../Middlewares/Third_Party/FatFs/src/drivers/sd_diskio.h
 balabolka_f103rtc\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+balabolka_f103rtc\main.o: ../Inc/pip_define.h

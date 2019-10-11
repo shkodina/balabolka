@@ -579,18 +579,17 @@ ARM Macro Assembler    Page 9
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
 ork --depend=balabolka_f103rtc\startup_stm32f103xe.d -obalabolka_f103rtc\startu
-p_stm32f103xe.o -I"D:\YandexDisk\Проекты. Контроллер. Концепции\Реализованные п
-роекты\Балаболка\balabolka_stm32f103\balabolka_f103rtc\MDK-ARM\RTE" -IC:\Keil_v
-5\ARM\PACK\ARM\CMSIS\5.0.0-Beta4\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32
-F1xx_DFP\2.1.0\Device\Include --predefine="__MICROLIB SETA 1" --predefine="__UV
+p_stm32f103xe.o -I.\RTE\_balabolka_f103rtc -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.6.
+0\CMSIS\Core\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Incl
+ude --predefine="__EVAL SETA 1" --predefine="__MICROLIB SETA 1" --predefine="__
+UVISION_VERSION SETA 524" --predefine="_RTE_ SETA 1" --predefine="STM32F10X_HD 
 
 
 
 ARM Macro Assembler    Page 10 
 
 
-ISION_VERSION SETA 520" --predefine="_RTE_ SETA 1" --predefine="STM32F10X_HD SE
-TA 1" --list=startup_stm32f103xe.lst startup_stm32f103xe.s
+SETA 1" --list=startup_stm32f103xe.lst startup_stm32f103xe.s
 
 
 
@@ -1462,4 +1461,4 @@ Symbol: __main
       At line 168 in file startup_stm32f103xe.s
 Comment: __main used once
 2 symbols
-423 symbols in table
+424 symbols in table

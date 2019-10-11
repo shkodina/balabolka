@@ -1,0 +1,115 @@
+#ifndef PIPER_DEFINE_FOR_BALABOLKA_H
+#define PIPER_DEFINE_FOR_BALABOLKA_H
+
+#define LOGDEBUG
+
+
+//----------------------------------------------------------------------------
+#define FlashStartAddress (FLASH_BASE + 1024 *127) //0x08000F000 //
+																	
+#define FLASH_ADDR_SHIFT_is_random 10
+#define FLASH_ADDR_SHIFT_delay_pool 20
+#define FLASH_ADDR_SHIFT_time_play_mode 30
+#define FLASH_ADDR_SHIFT_is_power_on 34
+#define FLASH_ADDR_SHIFT_selected_groups_count 40
+#define FLASH_ADDR_SHIFT_selected_groups 50
+
+//----------------------------------------------------------------------------
+#define DAY_NIGHT_THRESHOLD 300
+#define DAY_NIGHT_THRESHOLD_DELTA 70
+//----------------------------------------------------------------------------
+#define POLLADCTICKDEF 15
+//----------------------------------------------------------------------------
+#define PORT_STAND_BY GPIOA
+#define PIN_STAND_BY GPIO_PIN_11
+
+#define PORT_LED_POWER GPIOC		
+#define PIN_LED_POWER GPIO_PIN_13 
+
+#define PORT_BUTTON_POWER GPIOA
+#define PIN_BUTTON_POWER GPIO_PIN_15
+
+
+
+#define PORT_LED_RANDOM GPIOA		
+#define PIN_LED_RANDOM GPIO_PIN_10 
+
+#define PORT_BUTTON_RANDOM GPIOA
+#define PIN_BUTTON_RANDOM GPIO_PIN_9
+
+
+
+#define PORT_LED_PAUSE_0 GPIOB		
+#define PIN_LED_PAUSE_0 GPIO_PIN_13 
+#define PORT_LED_PAUSE_1 GPIOB		
+#define PIN_LED_PAUSE_1 GPIO_PIN_14 
+#define PORT_LED_PAUSE_2 GPIOB		
+#define PIN_LED_PAUSE_2 GPIO_PIN_3 
+#define PORT_LED_PAUSE_3 GPIOB		
+#define PIN_LED_PAUSE_3 GPIO_PIN_12 
+
+#define PORT_BUTTON_PAUSE GPIOB
+#define PIN_BUTTON_PAUSE GPIO_PIN_4
+
+
+
+#define PORT_LED_MODE_DAY GPIOA		
+#define PIN_LED_MODE_DAY GPIO_PIN_8 
+#define PORT_LED_MODE_NIGHT GPIOC		
+#define PIN_LED_MODE_NIGHT GPIO_PIN_7 
+#define PORT_LED_MODE_DAYnNIGHT GPIOC		
+#define PIN_LED_MODE_DAYnNIGHT GPIO_PIN_6
+
+#define PORT_BUTTON_MODE GPIOB
+#define PIN_BUTTON_MODE GPIO_PIN_15
+
+
+
+#define PORT_LED_GROUP_0 GPIOC		
+#define PIN_LED_GROUP_0 GPIO_PIN_14 
+#define PORT_LED_GROUP_1 GPIOC		
+#define PIN_LED_GROUP_1 GPIO_PIN_3 
+#define PORT_LED_GROUP_2 GPIOB		
+#define PIN_LED_GROUP_2 GPIO_PIN_9 
+#define PORT_LED_GROUP_3 GPIOB		
+#define PIN_LED_GROUP_3 GPIO_PIN_7 
+#define PORT_LED_GROUP_4 GPIOB		
+#define PIN_LED_GROUP_4 GPIO_PIN_5
+
+#define PORT_LED_GROUP_5 GPIOC		
+#define PIN_LED_GROUP_5 GPIO_PIN_0 
+#define PORT_LED_GROUP_6 GPIOA		
+#define PIN_LED_GROUP_6 GPIO_PIN_3 
+#define PORT_LED_GROUP_7 GPIOA		
+#define PIN_LED_GROUP_7 GPIO_PIN_7 
+#define PORT_LED_GROUP_8 GPIOC		
+#define PIN_LED_GROUP_8 GPIO_PIN_5 
+#define PORT_LED_GROUP_9 GPIOB		
+#define PIN_LED_GROUP_9 GPIO_PIN_1 
+
+
+#define PORT_BUTTON_GROUP_0 GPIOC
+#define PIN_BUTTON_GROUP_0 GPIO_PIN_15
+#define PORT_BUTTON_GROUP_1 GPIOC
+#define PIN_BUTTON_GROUP_1 GPIO_PIN_2
+#define PORT_BUTTON_GROUP_2 GPIOB
+#define PIN_BUTTON_GROUP_2 GPIO_PIN_2
+#define PORT_BUTTON_GROUP_3 GPIOB
+#define PIN_BUTTON_GROUP_3 GPIO_PIN_8
+#define PORT_BUTTON_GROUP_4 GPIOB
+#define PIN_BUTTON_GROUP_4 GPIO_PIN_6
+#define PORT_BUTTON_GROUP_5 GPIOC
+#define PIN_BUTTON_GROUP_5 GPIO_PIN_1
+#define PORT_BUTTON_GROUP_6 GPIOA
+#define PIN_BUTTON_GROUP_6 GPIO_PIN_2
+
+#define PORT_BUTTON_GROUP_7 GPIOA
+#define PIN_BUTTON_GROUP_7 GPIO_PIN_6
+#define PORT_BUTTON_GROUP_8 GPIOC
+#define PIN_BUTTON_GROUP_8 GPIO_PIN_4
+#define PORT_BUTTON_GROUP_9 GPIOB
+#define PIN_BUTTON_GROUP_9 GPIO_PIN_0
+
+
+
+#endif

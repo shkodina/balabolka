@@ -50,6 +50,7 @@
 #include "stm32f1xx_hal.h"
 #include "fatfs.h"
 
+
 /* USER CODE BEGIN Includes */
 #include <string.h>
 /* USER CODE END Includes */
@@ -94,6 +95,8 @@ static void MX_TIM7_Init(void);
 //============================================================================
 //	DEFINES			DEFINES			DEFINES			DEFINES			DEFINES			DEFINES					
 //============================================================================	
+#include "pip_define.h"
+
 enum BOOL {FALSE = 0, TRUE = 1};
 //----------------------------------------------------------------------------
 FATFS fatfs;  /* File system object for SD card logical drive */
@@ -135,15 +138,6 @@ volatile char 		is_need_play = FALSE;
 volatile static uint16_t next_track = -1;
 volatile uint16_t need_paly_track_number = 0;
 //----------------------------------------------------------------------------
-#define FlashStartAddress (FLASH_BASE + 1024 *127) //0x08000F000 //
-																	
-#define FLASH_ADDR_SHIFT_is_random 10
-#define FLASH_ADDR_SHIFT_delay_pool 20
-#define FLASH_ADDR_SHIFT_time_play_mode 30
-#define FLASH_ADDR_SHIFT_is_power_on 34
-#define FLASH_ADDR_SHIFT_selected_groups_count 40
-#define FLASH_ADDR_SHIFT_selected_groups 50
-//----------------------------------------------------------------------------
 struct Settings {
 	char is_random;
 	char delay_pool;
@@ -155,101 +149,6 @@ struct Settings {
 	char is_power_on;
 } machine_settings;
 //----------------------------------------------------------------------------
-#define DAY_NIGHT_THRESHOLD 300
-#define DAY_NIGHT_THRESHOLD_DELTA 70
-//----------------------------------------------------------------------------
-#define POLLADCTICKDEF 15
-//----------------------------------------------------------------------------
-#define PORT_STAND_BY GPIOA
-#define PIN_STAND_BY GPIO_PIN_11
-
-#define PORT_LED_POWER GPIOC		
-#define PIN_LED_POWER GPIO_PIN_13 
-
-#define PORT_BUTTON_POWER GPIOA
-#define PIN_BUTTON_POWER GPIO_PIN_15
-
-
-
-#define PORT_LED_RANDOM GPIOA		
-#define PIN_LED_RANDOM GPIO_PIN_10 
-
-#define PORT_BUTTON_RANDOM GPIOA
-#define PIN_BUTTON_RANDOM GPIO_PIN_9
-
-
-
-#define PORT_LED_PAUSE_0 GPIOB		
-#define PIN_LED_PAUSE_0 GPIO_PIN_13 
-#define PORT_LED_PAUSE_1 GPIOB		
-#define PIN_LED_PAUSE_1 GPIO_PIN_14 
-#define PORT_LED_PAUSE_2 GPIOB		
-#define PIN_LED_PAUSE_2 GPIO_PIN_3 
-#define PORT_LED_PAUSE_3 GPIOB		
-#define PIN_LED_PAUSE_3 GPIO_PIN_12 
-
-#define PORT_BUTTON_PAUSE GPIOB
-#define PIN_BUTTON_PAUSE GPIO_PIN_4
-
-
-
-#define PORT_LED_MODE_DAY GPIOA		
-#define PIN_LED_MODE_DAY GPIO_PIN_8 
-#define PORT_LED_MODE_NIGHT GPIOC		
-#define PIN_LED_MODE_NIGHT GPIO_PIN_7 
-#define PORT_LED_MODE_DAYnNIGHT GPIOC		
-#define PIN_LED_MODE_DAYnNIGHT GPIO_PIN_6
-
-#define PORT_BUTTON_MODE GPIOB
-#define PIN_BUTTON_MODE GPIO_PIN_15
-
-
-
-#define PORT_LED_GROUP_0 GPIOC		
-#define PIN_LED_GROUP_0 GPIO_PIN_14 
-#define PORT_LED_GROUP_1 GPIOC		
-#define PIN_LED_GROUP_1 GPIO_PIN_3 
-#define PORT_LED_GROUP_2 GPIOB		
-#define PIN_LED_GROUP_2 GPIO_PIN_9 
-#define PORT_LED_GROUP_3 GPIOB		
-#define PIN_LED_GROUP_3 GPIO_PIN_7 
-#define PORT_LED_GROUP_4 GPIOB		
-#define PIN_LED_GROUP_4 GPIO_PIN_5
-
-#define PORT_LED_GROUP_5 GPIOC		
-#define PIN_LED_GROUP_5 GPIO_PIN_0 
-#define PORT_LED_GROUP_6 GPIOA		
-#define PIN_LED_GROUP_6 GPIO_PIN_3 
-#define PORT_LED_GROUP_7 GPIOA		
-#define PIN_LED_GROUP_7 GPIO_PIN_7 
-#define PORT_LED_GROUP_8 GPIOC		
-#define PIN_LED_GROUP_8 GPIO_PIN_5 
-#define PORT_LED_GROUP_9 GPIOB		
-#define PIN_LED_GROUP_9 GPIO_PIN_1 
-
-
-#define PORT_BUTTON_GROUP_0 GPIOC
-#define PIN_BUTTON_GROUP_0 GPIO_PIN_15
-#define PORT_BUTTON_GROUP_1 GPIOC
-#define PIN_BUTTON_GROUP_1 GPIO_PIN_2
-#define PORT_BUTTON_GROUP_2 GPIOB
-#define PIN_BUTTON_GROUP_2 GPIO_PIN_2
-#define PORT_BUTTON_GROUP_3 GPIOB
-#define PIN_BUTTON_GROUP_3 GPIO_PIN_8
-#define PORT_BUTTON_GROUP_4 GPIOB
-#define PIN_BUTTON_GROUP_4 GPIO_PIN_6
-#define PORT_BUTTON_GROUP_5 GPIOC
-#define PIN_BUTTON_GROUP_5 GPIO_PIN_1
-#define PORT_BUTTON_GROUP_6 GPIOA
-#define PIN_BUTTON_GROUP_6 GPIO_PIN_2
-
-#define PORT_BUTTON_GROUP_7 GPIOA
-#define PIN_BUTTON_GROUP_7 GPIO_PIN_6
-#define PORT_BUTTON_GROUP_8 GPIOC
-#define PIN_BUTTON_GROUP_8 GPIO_PIN_4
-#define PORT_BUTTON_GROUP_9 GPIOB
-#define PIN_BUTTON_GROUP_9 GPIO_PIN_0
-
 enum BUTTONS {BUTTON_POWER = 0,
 							BUTTON_RANDOM,
 							BUTTON_PAUSE,
@@ -276,11 +175,15 @@ volatile GPIO_PinState last_button_state[BUTTONS_COUNT] = {0};
 //============================================================================
 //	LOG			LOG			LOG			LOG			LOG			LOG			LOG			LOG			LOG			
 //============================================================================																		
+#ifdef LOGDEBUG
 char str[128];
 void Log(char * text){
 	sprintf(str, "%s", text);
 	HAL_UART_Transmit(&huart3, (uint8_t *)str, strlen(str), 1000);
 }
+#else
+inline void Log(char * text){};
+#endif
 //============================================================================
 //	LOG			LOG			LOG			LOG			LOG			LOG			LOG			LOG			LOG
 //============================================================================
@@ -332,7 +235,7 @@ void mx____machine_step(){ // poll every 10ms
 	
 	switch (state){
 		case INIT:
-			//Log("-- INIT --\n\r");
+			Log("-- INIT --\n\r");
 			mx_00_machine_init();
 		  //mx_04_light_leds_by_settings();	
 			pl_05_amp_on();  	
@@ -340,7 +243,7 @@ void mx____machine_step(){ // poll every 10ms
 			break;
 		
 		case START:
-			//Log("-- START --\n\r");
+			Log("-- START --\n\r");
 			state = LIGHT_LEDS;
 			state = SELECT_WAV;
 		
@@ -349,7 +252,7 @@ void mx____machine_step(){ // poll every 10ms
 			break;
 		
 		case CHECK_BUTTONS: 
-			//Log("-- CHECK_BUTTONS --\n\r");
+			Log("-- CHECK_BUTTONS --\n\r");
 			mx_02_check_buttons_and_update_settings();
 			{
 				static char is_power_on_lstate = FALSE;
@@ -389,13 +292,13 @@ void mx____machine_step(){ // poll every 10ms
 			break;
 			
 		case LIGHT_LEDS:
-			//Log("-- LIGHT_LEDS --\n\r");
+			Log("-- LIGHT_LEDS --\n\r");
 			mx_04_light_leds_by_settings();
 			state = CHECK_LIGHTS;
 			break;
 		
 		case CHECK_LIGHTS:
-			//Log("-- CHECK_LIGHTS --\n\r");
+			Log("-- CHECK_LIGHTS --\n\r");
 		{
 			char light = mx_05_check_light();
 			static char is_need_go_start = TRUE;
@@ -436,7 +339,7 @@ void mx____machine_step(){ // poll every 10ms
 			break;
 				
 		case CHECK_PLAY:
-			//Log("-- CHECK_PLAY --\n\r");
+			Log("-- CHECK_PLAY --\n\r");
 			if (is_need_play == TRUE){
 				state = CHECK_BUTTONS;
 				//HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);	
@@ -447,7 +350,7 @@ void mx____machine_step(){ // poll every 10ms
 		break;
 		
 		case SELECT_DELAY:
-			//Log("-- SELECT_DELAY --\n\r");
+			Log("-- SELECT_DELAY --\n\r");
 			if (timer == DELAY_TIMER_NO_SET){
 				timer = xx_00_random_between(	delay_pool_bounds[machine_settings.delay_pool][0], 
 																			delay_pool_bounds[machine_settings.delay_pool][1]);
@@ -457,7 +360,7 @@ void mx____machine_step(){ // poll every 10ms
 			break;
 			
 		case MAKE_DELAY:
-			//Log("-- MAKE_DELAY --\n\r");
+			Log("-- MAKE_DELAY --\n\r");
 			if(--timer == DELAY_TIMER_NO_SET){ // time to play next
 				state = SELECT_WAV;
 			}else{
@@ -466,7 +369,7 @@ void mx____machine_step(){ // poll every 10ms
 			break;
 			
 		case SELECT_WAV:
-			//Log("-- SELECT_WAV --\n\r");
+			Log("-- SELECT_WAV --\n\r");
 		
 		{
 			if(machine_settings.selected_groups_count == 0){
@@ -489,14 +392,14 @@ void mx____machine_step(){ // poll every 10ms
 			break;
 	
 		case PLAY:
-			//Log("-- PLAY --\n\r");
+			Log("-- PLAY --\n\r");
 			is_need_play = TRUE;
 			state = CHECK_BUTTONS;
 			break;
 		case STOP:
 			break;
 		case POWER_OFF:
-			//Log("-- POWER_OFF --\n\r");
+			Log("-- POWER_OFF --\n\r");
 			mx_06_light_leds_off();	
 		  pl_06_amp_off();
 			state = CHECK_BUTTONS;
@@ -921,74 +824,77 @@ static void MX_GPIO_Init(void)
 //==========================================================================================
 //	MY FUNCK		MY FUNCK		MY FUNCK		MY FUNCK		MY FUNCK		MY FUNCK		MY FUNCK
 //==========================================================================================
-void pl_00_play_wav(char * filename){
-	
-		if(f_open(&file, filename, FA_READ) == FR_OK){
-			Log("open read ok\n\r");
-			if(f_lseek(&file,0x2c) == FR_OK){
-				Log("lseek ok\n\r");
-				
-				uint32_t bytesread;				
-				
-				cur_buff = 0;
-				// START PLAY
-				// HAL_TIM_Base_Start(&htim6);
-				if(f_read(&file, buff[cur_buff], bufflen*2, &bytesread) == FR_OK){
-					HAL_DAC_Start(&hdac, DAC_CHANNEL_2);
-					pl_04_prepare_buffer(bufflen);
-					need_stop = 0;
-					
-					
-					pl_02_next_buf();	
-					
-				}else{
-						// ERROR MAY BE ??
-				}
-					
-				// START PREPARE BYFFER
-				while ((f_read(&file, buff[cur_buff], bufflen*2, &bytesread) == FR_OK)
-								&&
-								(bytesread == bufflen*2))
-				{
-					
-					  HAL_TIM_Base_Start(&htim7);
-						pl_04_prepare_buffer(bufflen);
-						need_update_buffer  = 0;
-
-						
-						while (need_update_buffer == 0){
-							
-							if (is_need_play == FALSE){
-								need_stop = 1;
-							}
-							
-							if (need_stop)
-								break;
-						}
-						HAL_TIM_Base_Stop(&htim7);
-				}
-				
-				
-				
-				if(bytesread != bufflen*2){
-					Log("bytesread != bufflen*2\n\r");
-				}else{
-					Log("f_read != FR_OK\n\r");
-				}
-				
-				need_stop = 1;
-				
-				f_close(&file);
-			}else{
-				Log("lseek error\n\r");
-				f_close(&file);
-			}				
-		}else{
-			Log("open read error\n\r");
-		}
+void pl_00_play_wav_on_exit(){
 		need_stop = 1;
 		HAL_TIM_Base_Start(&htim7);
 		Log("Stop Play\n\r");
+}
+void pl_00_play_wav(char * filename){
+	
+	if(f_open(&file, filename, FA_READ) != FR_OK){
+		Log("open read error\n\r");
+		pl_00_play_wav_on_exit();
+	}	
+	Log("open read ok\n\r");
+
+	if(f_lseek(&file,0x2c) != FR_OK){
+		Log("lseek error\n\r");
+		f_close(&file);		
+		pl_00_play_wav_on_exit();
+	}
+	Log("lseek ok\n\r");
+				
+	uint32_t bytesread;				
+	
+	cur_buff = 0;
+	// START PLAY
+	// HAL_TIM_Base_Start(&htim6);
+	if(f_read(&file, buff[cur_buff], bufflen*2, &bytesread) == FR_OK){
+		HAL_DAC_Start(&hdac, DAC_CHANNEL_2);
+		pl_04_prepare_buffer(bufflen);
+		need_stop = 0;
+		
+		
+		pl_02_next_buf();	
+		
+	}else{
+			// ERROR MAY BE ??
+	}
+		
+	// START PREPARE BYFFER
+	while ((f_read(&file, buff[cur_buff], bufflen*2, &bytesread) == FR_OK)
+					&&
+					(bytesread == bufflen*2))
+	{
+		
+			HAL_TIM_Base_Start(&htim7);
+			pl_04_prepare_buffer(bufflen);
+			need_update_buffer  = 0;
+
+			
+			while (need_update_buffer == 0){
+				
+				if (is_need_play == FALSE){
+					need_stop = 1;
+				}
+				
+				if (need_stop)
+					break;
+			}
+			HAL_TIM_Base_Stop(&htim7);
+	}
+	
+	
+	
+	if(bytesread != bufflen*2){
+		Log("bytesread != bufflen*2\n\r");
+	}else{
+		Log("f_read != FR_OK\n\r");
+	}
+	
+	f_close(&file);
+	pl_00_play_wav_on_exit();
+		
 }
 //==========================================================================================
 void pl_01_play_stop(){
@@ -1180,7 +1086,7 @@ void mx_00_machine_init(){
 */
 	mx_01_read_settings_from_eeprom();
 
-	Log("rad from eeprom\n\r");
+	Log("read from eeprom\n\r");
 	char st[64];
 	sprintf(st, "r=%d d=%d plm=%d sgc=%d ispon=%d \n\r", 
 	machine_settings.is_random,

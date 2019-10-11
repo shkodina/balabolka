@@ -31,6 +31,6 @@
 "balabolka_f103rtc\ff_gen_drv.o"
 "balabolka_f103rtc\ff.o"
 --library_type=microlib --strict --scatter "balabolka_f103rtc\balabolka_f103rtc.sct"
---diag_suppress=L6329 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--diag_suppress=L6329 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
 --list "balabolka_f103rtc.map" -o balabolka_f103rtc\balabolka_f103rtc.axf
