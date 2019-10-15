@@ -252,7 +252,9 @@ void mx____machine_step(){ // poll every 10ms
 			break;
 		
 		case CHECK_BUTTONS: 
-			Log("-- CHECK_BUTTONS --\n\r");
+			#ifdef FULLOGDEFINE
+				Log("-- CHECK_BUTTONS --\n\r");
+		  #endif
 			mx_02_check_buttons_and_update_settings();
 			{
 				static char is_power_on_lstate = FALSE;
@@ -263,16 +265,21 @@ void mx____machine_step(){ // poll every 10ms
 					break;
 				}else{
 					if(is_power_on_lstate == FALSE){
+						Log("---- WAIKE UP --\n\r");
 						is_power_on_lstate = machine_settings.is_power_on;
 						pl_05_amp_on(); 
 						state = LIGHT_LEDS;	
 						
 						if (machine_settings.is_random == RANDOM){
+							Log("------ IN RANDOM --\n\r");
 							state = SELECT_WAV;
 						}else{
-							next_track = 0;
-							mx_07_select_track(next_track);
-							state = PLAY;
+							Log("------ IN 0 TRACK --\n\r");
+							next_track = -1;
+							state = SELECT_WAV;
+							//next_track = 0;
+							//mx_07_select_track(next_track);
+							//state = PLAY;
 						}
 						//state = SELECT_WAV;
 						//state = MAKE_DELAY;
@@ -298,7 +305,9 @@ void mx____machine_step(){ // poll every 10ms
 			break;
 		
 		case CHECK_LIGHTS:
-			Log("-- CHECK_LIGHTS --\n\r");
+			#ifdef FULLOGDEFINE
+			  Log("-- CHECK_LIGHTS --\n\r");
+		  #endif
 		{
 			char light = mx_05_check_light();
 			static char is_need_go_start = TRUE;
@@ -339,7 +348,10 @@ void mx____machine_step(){ // poll every 10ms
 			break;
 				
 		case CHECK_PLAY:
-			Log("-- CHECK_PLAY --\n\r");
+			#ifdef FULLOGDEFINE
+			  Log("-- CHECK_PLAY --\n\r");
+		  #endif
+		
 			if (is_need_play == TRUE){
 				state = CHECK_BUTTONS;
 				//HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);	
@@ -350,8 +362,11 @@ void mx____machine_step(){ // poll every 10ms
 		break;
 		
 		case SELECT_DELAY:
-			Log("-- SELECT_DELAY --\n\r");
+			#ifdef FULLOGDEFINE
+			  Log("-- SELECT_DELAY --\n\r");
+		  #endif
 			if (timer == DELAY_TIMER_NO_SET){
+				Log("-- SELECT new read delay in SELECT DELAY --\n\r");
 				timer = xx_00_random_between(	delay_pool_bounds[machine_settings.delay_pool][0], 
 																			delay_pool_bounds[machine_settings.delay_pool][1]);
 				timer *= 10;
@@ -360,7 +375,9 @@ void mx____machine_step(){ // poll every 10ms
 			break;
 			
 		case MAKE_DELAY:
-			Log("-- MAKE_DELAY --\n\r");
+			#ifdef FULLOGDEFINE
+			  Log("-- MAKE_DELAY --\n\r");
+		  #endif
 			if(--timer == DELAY_TIMER_NO_SET){ // time to play next
 				state = SELECT_WAV;
 			}else{
@@ -400,6 +417,7 @@ void mx____machine_step(){ // poll every 10ms
 			break;
 		case POWER_OFF:
 			Log("-- POWER_OFF --\n\r");
+		  is_need_play = FALSE;
 			mx_06_light_leds_off();	
 		  pl_06_amp_off();
 			state = CHECK_BUTTONS;
@@ -482,7 +500,7 @@ int main(void)
 				char fname[64] = {0};
 				sprintf(fname, "%04d.WAV", need_paly_track_number);
 				
-				Log("try to play ");
+				Log("++++ try to play ");
 				Log(fname);
 				Log("\n\r\n\r");
 				//HAL_TIM_Base_Start(&htim6);
@@ -849,6 +867,7 @@ void pl_00_play_wav(char * filename){
 	cur_buff = 0;
 	// START PLAY
 	// HAL_TIM_Base_Start(&htim6);
+	
 	if(f_read(&file, buff[cur_buff], bufflen*2, &bytesread) == FR_OK){
 		HAL_DAC_Start(&hdac, DAC_CHANNEL_2);
 		pl_04_prepare_buffer(bufflen);
@@ -859,12 +878,15 @@ void pl_00_play_wav(char * filename){
 		
 	}else{
 			// ERROR MAY BE ??
+		Log("! ! ! ! f_read error\n\r");
 	}
 		
 	// START PREPARE BYFFER
 	while ((f_read(&file, buff[cur_buff], bufflen*2, &bytesread) == FR_OK)
 					&&
-					(bytesread == bufflen*2))
+					(bytesread == bufflen*2)
+					&&
+					need_stop != 1)
 	{
 		
 			HAL_TIM_Base_Start(&htim7);
@@ -872,15 +894,18 @@ void pl_00_play_wav(char * filename){
 			need_update_buffer  = 0;
 
 			
-			while (need_update_buffer == 0){
+			while (need_update_buffer == 0
+							&&
+						need_stop != 1 ){
 				
 				if (is_need_play == FALSE){
+					Log("==== USER EXIT set is_need_play = FALSE while play\n\r");
 					need_stop = 1;
 				}
 				
-				if (need_stop)
-					break;
+				//if (need_stop) break;
 			}
+						
 			HAL_TIM_Base_Stop(&htim7);
 	}
 	
@@ -898,6 +923,7 @@ void pl_00_play_wav(char * filename){
 }
 //==========================================================================================
 void pl_01_play_stop(){
+	Log("++++ PLAY STOP in pl_01_play_stop\n\r");
 	need_stop = 1;
 	HAL_DAC_Stop_DMA(&hdac, DAC_CHANNEL_2);
 	HAL_DAC_Stop(&hdac, DAC_CHANNEL_2);
@@ -1057,11 +1083,29 @@ uint16_t xx_00_random_between(uint16_t min, uint16_t max){
 	int r = min + rnd;
 	// 	TODO
 		char st[64];
-		sprintf(st, "my random min=%d max=%d random=%d res=%d rnd=%d d=%d\n\r", min, max, v, r, rnd, d);
+		sprintf(st, "my random min=%d max=%d random=%d result=%d rnd=%d delta=%d\n\r", min, max, v, r, rnd, d);
 		Log(st);
 	return r;
 }
 //==========================================================================================
+void mx_0_log_machine_settings(){
+	char st[128];
+	sprintf(st, "is_random=%d\n\rdelay_pool=%d\n\rtime_play_mode=%d\n\rselected_groups_count=%d\n\ris_power_on=%d\n\r", 
+	machine_settings.is_random,
+	machine_settings.delay_pool,
+	machine_settings.time_play_mode,
+	machine_settings.selected_groups_count,
+	machine_settings.is_power_on);
+	Log(st);	
+	
+	Log("Selected groups: [");
+	for ( int i = 0; i < machine_settings.selected_groups_count; i++){
+		sprintf(st, " %d", machine_settings.selected_groups[i]);
+		Log(st);
+	}
+	Log(" ]\n\r");
+}
+//=================================
 void mx_00_machine_init(){
 /*
 	// DEBUG
@@ -1086,16 +1130,8 @@ void mx_00_machine_init(){
 */
 	mx_01_read_settings_from_eeprom();
 
-	Log("read from eeprom\n\r");
-	char st[64];
-	sprintf(st, "r=%d d=%d plm=%d sgc=%d ispon=%d \n\r", 
-	machine_settings.is_random,
-	machine_settings.delay_pool,
-	machine_settings.time_play_mode,
-	machine_settings.selected_groups_count,
-	machine_settings.is_power_on);
-	Log(st);
-
+	Log("\n\r read from eeprom\n\r");
+  mx_0_log_machine_settings();
 	
 	// count files to play
 	for(char i = 0; i < machine_settings.selected_groups_count; i++){
@@ -1350,16 +1386,8 @@ for (int i = 0; i < BUTTONS_COUNT; i++){
 void mx_03_write_settings_to_eeprom(){ // STUB TODO
 	
 	Log("Write to eeprom\n\r");
-			char st[64];
-	sprintf(st, "r=%d d=%d plm=%d sgc=%d ispon=%d \n\r", 
-	machine_settings.is_random,
-	machine_settings.delay_pool,
-	machine_settings.time_play_mode,
-	machine_settings.selected_groups_count,
-	machine_settings.is_power_on);
-	Log(st);
+  mx_0_log_machine_settings();
 
-	  
 	fl_01_flash_unlock();
 	
 	fl_02_erase_page_by_address(FlashStartAddress + 1);
