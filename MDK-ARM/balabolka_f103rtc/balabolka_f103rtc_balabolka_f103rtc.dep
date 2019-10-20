@@ -1,6 +1,6 @@
 Dependencies for Project 'balabolka_f103rtc', Target 'balabolka_f103rtc': (DO NOT MODIFY !)
 F (startup_stm32f103xe.s)(0x5DA0D2A2)(--cpu Cortex-M3 --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_balabolka_f103rtc-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include--pd "__UVISION_VERSION SETA 524" --pd "_RTE_ SETA 1" --pd "STM32F10X_HD SETA 1"--list startup_stm32f103xe.lst --xref -o balabolka_f103rtc\startup_stm32f103xe.o --depend balabolka_f103rtc\startup_stm32f103xe.d)
-F (../Src/main.c)(0x5DAC2757)(-c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src/drivers -I ../Middlewares/Third_Party/FatFs/src --C99-I.\RTE\_balabolka_f103rtc-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o balabolka_f103rtc\main.o --omf_browse balabolka_f103rtc\main.crf --depend balabolka_f103rtc\main.d)
+F (../Src/main.c)(0x5DACA530)(-c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src/drivers -I ../Middlewares/Third_Party/FatFs/src --C99-I.\RTE\_balabolka_f103rtc-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o balabolka_f103rtc\main.o --omf_browse balabolka_f103rtc\main.crf --depend balabolka_f103rtc\main.d)
 I (../Inc/main.h)(0x5DA0D29C)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x5DA0D297)
 I (../Inc/stm32f1xx_hal_conf.h)(0x5DA0D29C)
@@ -43,7 +43,7 @@ I (../Middlewares/Third_Party/FatFs/src/ff_gen_drv.h)(0x5DA0D2A3)
 I (../Middlewares/Third_Party/FatFs/src/diskio.h)(0x5DA0D2A2)
 I (../Middlewares/Third_Party/FatFs/src/drivers/sd_diskio.h)(0x5DA0D2A2)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588BC994)
-I (../Inc/pip_define.h)(0x5DAC20EB)
+I (../Inc/pip_define.h)(0x5DAC9FA8)
 F (../Src/stm32f1xx_hal_msp.c)(0x5DA0D2A3)(-c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src/drivers -I ../Middlewares/Third_Party/FatFs/src --C99-I.\RTE\_balabolka_f103rtc-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o balabolka_f103rtc\stm32f1xx_hal_msp.o --omf_browse balabolka_f103rtc\stm32f1xx_hal_msp.crf --depend balabolka_f103rtc\stm32f1xx_hal_msp.d)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x5DA0D297)
 I (../Inc/stm32f1xx_hal_conf.h)(0x5DA0D29C)
@@ -190,7 +190,7 @@ I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_sdmmc.h)(0x5DA0D29A)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h)(0x5DA0D299)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h)(0x5DA0D299)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h)(0x5DA0D299)
-F (..\Inc\pip_define.h)(0x5DAC20EB)()
+F (..\Inc\pip_define.h)(0x5DAC9FA8)()
 F (../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pwr.c)(0x5DA0D29B)(-c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src/drivers -I ../Middlewares/Third_Party/FatFs/src --C99-I.\RTE\_balabolka_f103rtc-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o balabolka_f103rtc\stm32f1xx_hal_pwr.o --omf_browse balabolka_f103rtc\stm32f1xx_hal_pwr.crf --depend balabolka_f103rtc\stm32f1xx_hal_pwr.d)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x5DA0D297)
 I (../Inc/stm32f1xx_hal_conf.h)(0x5DA0D29C)

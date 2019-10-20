@@ -3,7 +3,7 @@
 <title>Static Call Graph - [balabolka_f103rtc\balabolka_f103rtc.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image balabolka_f103rtc\balabolka_f103rtc.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Sun Oct 20 12:22:56 2019
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Sun Oct 20 21:19:40 2019
 <BR><P>
 <H3>Maximum Stack Usage =       4536 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -712,7 +712,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[133]"></a>HAL_DAC_GetValue</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, stm32f1xx_hal_dac.o(i.HAL_DAC_GetValue))
-<BR><BR>[Called By]<UL><LI><a href="#[12c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xx_00_random_between
+<BR><BR>[Called By]<UL><LI><a href="#[12b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xx_00_random_between
 </UL>
 
 <P><STRONG><a name="[90]"></a>HAL_DAC_Init</STRONG> (Thumb, 40 bytes, Stack size 16 bytes, stm32f1xx_hal_dac.o(i.HAL_DAC_Init))
@@ -733,17 +733,16 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DAC_Init
 </UL>
 
-<P><STRONG><a name="[116]"></a>HAL_DAC_SetValue</STRONG> (Thumb, 26 bytes, Stack size 12 bytes, stm32f1xx_hal_dac.o(i.HAL_DAC_SetValue))
+<P><STRONG><a name="[131]"></a>HAL_DAC_SetValue</STRONG> (Thumb, 26 bytes, Stack size 12 bytes, stm32f1xx_hal_dac.o(i.HAL_DAC_SetValue))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = HAL_DAC_SetValue
 </UL>
-<BR>[Called By]<UL><LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_05_amp_on
-<LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<BR>[Called By]<UL><LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_05_amp_on
 </UL>
 
 <P><STRONG><a name="[113]"></a>HAL_DAC_Start</STRONG> (Thumb, 84 bytes, Stack size 12 bytes, stm32f1xx_hal_dac.o(i.HAL_DAC_Start))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = HAL_DAC_Start
 </UL>
-<BR>[Called By]<UL><LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_05_amp_on
+<BR>[Called By]<UL><LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_05_amp_on
 <LI><a href="#[114]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_00_play_wav
 <LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -756,7 +755,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_02_next_buf
 </UL>
 
-<P><STRONG><a name="[131]"></a>HAL_DAC_Stop</STRONG> (Thumb, 22 bytes, Stack size 12 bytes, stm32f1xx_hal_dac.o(i.HAL_DAC_Stop))
+<P><STRONG><a name="[130]"></a>HAL_DAC_Stop</STRONG> (Thumb, 22 bytes, Stack size 12 bytes, stm32f1xx_hal_dac.o(i.HAL_DAC_Stop))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = HAL_DAC_Stop
 </UL>
 <BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_02_next_buf
@@ -822,18 +821,18 @@ Global Symbols
 <LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
 </UL>
 
-<P><STRONG><a name="[11b]"></a>HAL_GPIO_ReadPin</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32f1xx_hal_gpio.o(i.HAL_GPIO_ReadPin))
-<BR><BR>[Called By]<UL><LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_02_check_buttons_and_update_settings
+<P><STRONG><a name="[11a]"></a>HAL_GPIO_ReadPin</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32f1xx_hal_gpio.o(i.HAL_GPIO_ReadPin))
+<BR><BR>[Called By]<UL><LI><a href="#[119]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_02_check_buttons_and_update_settings
 </UL>
 
 <P><STRONG><a name="[cd]"></a>HAL_GPIO_WritePin</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32f1xx_hal_gpio.o(i.HAL_GPIO_WritePin))
-<BR><BR>[Called By]<UL><LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_06_amp_off
-<LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_05_amp_on
-<LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____machine_step
-<LI><a href="#[127]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_09_blink_power_led
-<LI><a href="#[126]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_08_light_leds_for_shutdown_off
-<LI><a href="#[124]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_06_light_leds_off
-<LI><a href="#[123]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_04_light_leds_by_settings
+<BR><BR>[Called By]<UL><LI><a href="#[12c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_06_amp_off
+<LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_05_amp_on
+<LI><a href="#[126]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_09_blink_power_led
+<LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_08_light_leds_for_shutdown_off
+<LI><a href="#[123]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_06_light_leds_off
+<LI><a href="#[122]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_04_light_leds_by_settings
+<LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____CHECK_LIGHTS
 <LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
 </UL>
 
@@ -1098,16 +1097,16 @@ Global Symbols
 
 <P><STRONG><a name="[111]"></a>HAL_TIM_Base_Start</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, stm32f1xx_hal_tim.o(i.HAL_TIM_Base_Start))
 <BR><BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_02_next_buf
-<LI><a href="#[12e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_00_play_wav_on_exit
 <LI><a href="#[114]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_00_play_wav
 <LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_00_play_wav_on_exit
 </UL>
 
 <P><STRONG><a name="[112]"></a>HAL_TIM_Base_Start_IT</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, stm32f1xx_hal_tim.o(i.HAL_TIM_Base_Start_IT))
 <BR><BR>[Called By]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[130]"></a>HAL_TIM_Base_Stop</STRONG> (Thumb, 44 bytes, Stack size 0 bytes, stm32f1xx_hal_tim.o(i.HAL_TIM_Base_Stop))
+<P><STRONG><a name="[12f]"></a>HAL_TIM_Base_Stop</STRONG> (Thumb, 44 bytes, Stack size 0 bytes, stm32f1xx_hal_tim.o(i.HAL_TIM_Base_Stop))
 <BR><BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_02_next_buf
 <LI><a href="#[114]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_00_play_wav
 </UL>
@@ -1185,19 +1184,20 @@ Global Symbols
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 <LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
 </UL>
-<BR>[Called By]<UL><LI><a href="#[12c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xx_00_random_between
+<BR>[Called By]<UL><LI><a href="#[12b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xx_00_random_between
 <LI><a href="#[115]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_01_play_stop
-<LI><a href="#[12e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_00_play_wav_on_exit
 <LI><a href="#[114]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_00_play_wav
 <LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____machine_step
-<LI><a href="#[12a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____START
-<LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____INIT
-<LI><a href="#[119]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_0_log_machine_settings
-<LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_07_select_track
-<LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_03_write_settings_to_eeprom
-<LI><a href="#[117]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_00_machine_init
+<LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_0_log_machine_settings
+<LI><a href="#[124]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_07_select_track
+<LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_03_write_settings_to_eeprom
+<LI><a href="#[119]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_02_check_buttons_and_update_settings
+<LI><a href="#[116]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_00_machine_init
 <LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[10d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m_0_scan_files
+<LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_00_play_wav_on_exit
+<LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____CHECK_LIGHTS
+<LI><a href="#[127]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____CHECK_BUTTONS
 </UL>
 
 <P><STRONG><a name="[cb]"></a>MX_FATFS_Init</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, fatfs.o(i.MX_FATFS_Init))
@@ -1348,7 +1348,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f103xe.o(.text)
 </UL>
 <P><STRONG><a name="[41]"></a>TIM7_IRQHandler</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, stm32f1xx_it.o(i.TIM7_IRQHandler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 328<LI>Call Chain = TIM7_IRQHandler &rArr; mx____machine_step &rArr; mx_02_check_buttons_and_update_settings &rArr; mx_03_write_settings_to_eeprom &rArr; mx_0_log_machine_settings &rArr; Log &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 328<LI>Call Chain = TIM7_IRQHandler &rArr; mx____machine_step &rArr; mx____CHECK_BUTTONS &rArr; mx_02_check_buttons_and_update_settings &rArr; mx_03_write_settings_to_eeprom &rArr; mx_0_log_machine_settings &rArr; Log &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_IRQHandler
 <LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xx_01_poll_adc
@@ -1387,9 +1387,9 @@ Global Symbols
 <P><STRONG><a name="[c4]"></a>__2sprintf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf6.o(i.__0sprintf$6))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = __2sprintf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[12c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xx_00_random_between
-<LI><a href="#[119]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_0_log_machine_settings
-<LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_07_select_track
+<BR>[Called By]<UL><LI><a href="#[12b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xx_00_random_between
+<LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_0_log_machine_settings
+<LI><a href="#[124]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_07_select_track
 <LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[10d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m_0_scan_files
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Log
@@ -1555,20 +1555,20 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[f0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_close
 </UL>
 
-<P><STRONG><a name="[11f]"></a>fl_01_flash_unlock</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, main.o(i.fl_01_flash_unlock))
-<BR><BR>[Called By]<UL><LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_03_write_settings_to_eeprom
+<P><STRONG><a name="[11e]"></a>fl_01_flash_unlock</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, main.o(i.fl_01_flash_unlock))
+<BR><BR>[Called By]<UL><LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_03_write_settings_to_eeprom
 </UL>
 
-<P><STRONG><a name="[120]"></a>fl_02_erase_page_by_address</STRONG> (Thumb, 64 bytes, Stack size 0 bytes, main.o(i.fl_02_erase_page_by_address))
-<BR><BR>[Called By]<UL><LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_03_write_settings_to_eeprom
+<P><STRONG><a name="[11f]"></a>fl_02_erase_page_by_address</STRONG> (Thumb, 64 bytes, Stack size 0 bytes, main.o(i.fl_02_erase_page_by_address))
+<BR><BR>[Called By]<UL><LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_03_write_settings_to_eeprom
 </UL>
 
-<P><STRONG><a name="[121]"></a>fl_03_write_data</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, main.o(i.fl_03_write_data))
-<BR><BR>[Called By]<UL><LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_03_write_settings_to_eeprom
+<P><STRONG><a name="[120]"></a>fl_03_write_data</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, main.o(i.fl_03_write_data))
+<BR><BR>[Called By]<UL><LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_03_write_settings_to_eeprom
 </UL>
 
-<P><STRONG><a name="[122]"></a>fl_04_flash_lock</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, main.o(i.fl_04_flash_lock))
-<BR><BR>[Called By]<UL><LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_03_write_settings_to_eeprom
+<P><STRONG><a name="[121]"></a>fl_04_flash_lock</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, main.o(i.fl_04_flash_lock))
+<BR><BR>[Called By]<UL><LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_03_write_settings_to_eeprom
 </UL>
 
 <P><STRONG><a name="[e5]"></a>get_fat</STRONG> (Thumb, 230 bytes, Stack size 32 bytes, ff.o(i.get_fat))
@@ -1603,7 +1603,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[46]"></a>main</STRONG> (Thumb, 440 bytes, Stack size 64 bytes, main.o(i.main))
+<P><STRONG><a name="[46]"></a>main</STRONG> (Thumb, 412 bytes, Stack size 64 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4536<LI>Call Chain = main &rArr; m_0_scan_files &rArr; f_opendir &rArr; follow_path &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_mount
@@ -1617,7 +1617,6 @@ Global Symbols
 <LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
 <LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
 <LI><a href="#[113]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DAC_Start
-<LI><a href="#[116]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DAC_SetValue
 <LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_Start_DMA
 <LI><a href="#[115]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_01_play_stop
 <LI><a href="#[114]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_00_play_wav
@@ -1633,48 +1632,49 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> entry9a.o(.ARM.Collect$$$$0000000B)
 </UL>
-<P><STRONG><a name="[117]"></a>mx_00_machine_init</STRONG> (Thumb, 64 bytes, Stack size 16 bytes, main.o(i.mx_00_machine_init))
+<P><STRONG><a name="[116]"></a>mx_00_machine_init</STRONG> (Thumb, 64 bytes, Stack size 16 bytes, main.o(i.mx_00_machine_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 240<LI>Call Chain = mx_00_machine_init &rArr; mx_0_log_machine_settings &rArr; Log &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[119]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_0_log_machine_settings
-<LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_01_read_settings_from_eeprom
+<BR>[Calls]<UL><LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_0_log_machine_settings
+<LI><a href="#[117]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_01_read_settings_from_eeprom
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Log
 </UL>
-<BR>[Called By]<UL><LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____INIT
+<BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____machine_step
 </UL>
 
-<P><STRONG><a name="[118]"></a>mx_01_read_settings_from_eeprom</STRONG> (Thumb, 126 bytes, Stack size 16 bytes, main.o(i.mx_01_read_settings_from_eeprom))
+<P><STRONG><a name="[117]"></a>mx_01_read_settings_from_eeprom</STRONG> (Thumb, 126 bytes, Stack size 16 bytes, main.o(i.mx_01_read_settings_from_eeprom))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = mx_01_read_settings_from_eeprom
 </UL>
-<BR>[Called By]<UL><LI><a href="#[117]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_00_machine_init
+<BR>[Called By]<UL><LI><a href="#[116]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_00_machine_init
 </UL>
 
-<P><STRONG><a name="[11a]"></a>mx_02_check_buttons_and_update_settings</STRONG> (Thumb, 464 bytes, Stack size 40 bytes, main.o(i.mx_02_check_buttons_and_update_settings))
-<BR><BR>[Stack]<UL><LI>Max Depth = 280<LI>Call Chain = mx_02_check_buttons_and_update_settings &rArr; mx_03_write_settings_to_eeprom &rArr; mx_0_log_machine_settings &rArr; Log &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<P><STRONG><a name="[119]"></a>mx_02_check_buttons_and_update_settings</STRONG> (Thumb, 474 bytes, Stack size 32 bytes, main.o(i.mx_02_check_buttons_and_update_settings))
+<BR><BR>[Stack]<UL><LI>Max Depth = 272<LI>Call Chain = mx_02_check_buttons_and_update_settings &rArr; mx_03_write_settings_to_eeprom &rArr; mx_0_log_machine_settings &rArr; Log &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[11b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
-<LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;validate_button_pressed
-<LI><a href="#[11e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;toggle_group
-<LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_03_write_settings_to_eeprom
+<BR>[Calls]<UL><LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
+<LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_03_write_settings_to_eeprom
+<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Log
+<LI><a href="#[11b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;validate_button_pressed
+<LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;toggle_group
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____machine_step
+<BR>[Called By]<UL><LI><a href="#[127]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____CHECK_BUTTONS
 </UL>
 
-<P><STRONG><a name="[11d]"></a>mx_03_write_settings_to_eeprom</STRONG> (Thumb, 106 bytes, Stack size 16 bytes, main.o(i.mx_03_write_settings_to_eeprom))
+<P><STRONG><a name="[11c]"></a>mx_03_write_settings_to_eeprom</STRONG> (Thumb, 106 bytes, Stack size 16 bytes, main.o(i.mx_03_write_settings_to_eeprom))
 <BR><BR>[Stack]<UL><LI>Max Depth = 240<LI>Call Chain = mx_03_write_settings_to_eeprom &rArr; mx_0_log_machine_settings &rArr; Log &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[119]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_0_log_machine_settings
-<LI><a href="#[122]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fl_04_flash_lock
-<LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fl_03_write_data
-<LI><a href="#[120]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fl_02_erase_page_by_address
-<LI><a href="#[11f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fl_01_flash_unlock
+<BR>[Calls]<UL><LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_0_log_machine_settings
+<LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fl_04_flash_lock
+<LI><a href="#[120]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fl_03_write_data
+<LI><a href="#[11f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fl_02_erase_page_by_address
+<LI><a href="#[11e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fl_01_flash_unlock
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Log
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____machine_step
-<LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_02_check_buttons_and_update_settings
+<BR>[Called By]<UL><LI><a href="#[119]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_02_check_buttons_and_update_settings
+<LI><a href="#[127]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____CHECK_BUTTONS
 </UL>
 
-<P><STRONG><a name="[123]"></a>mx_04_light_leds_by_settings</STRONG> (Thumb, 444 bytes, Stack size 32 bytes, main.o(i.mx_04_light_leds_by_settings))
+<P><STRONG><a name="[122]"></a>mx_04_light_leds_by_settings</STRONG> (Thumb, 444 bytes, Stack size 32 bytes, main.o(i.mx_04_light_leds_by_settings))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = mx_04_light_leds_by_settings
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -1682,11 +1682,11 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____machine_step
 </UL>
 
-<P><STRONG><a name="[12b]"></a>mx_05_check_light</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, main.o(i.mx_05_check_light))
-<BR><BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____machine_step
+<P><STRONG><a name="[12a]"></a>mx_05_check_light</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, main.o(i.mx_05_check_light))
+<BR><BR>[Called By]<UL><LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____CHECK_LIGHTS
 </UL>
 
-<P><STRONG><a name="[124]"></a>mx_06_light_leds_off</STRONG> (Thumb, 212 bytes, Stack size 24 bytes, main.o(i.mx_06_light_leds_off))
+<P><STRONG><a name="[123]"></a>mx_06_light_leds_off</STRONG> (Thumb, 212 bytes, Stack size 24 bytes, main.o(i.mx_06_light_leds_off))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = mx_06_light_leds_off
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -1694,7 +1694,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____machine_step
 </UL>
 
-<P><STRONG><a name="[125]"></a>mx_07_select_track</STRONG> (Thumb, 118 bytes, Stack size 96 bytes, main.o(i.mx_07_select_track))
+<P><STRONG><a name="[124]"></a>mx_07_select_track</STRONG> (Thumb, 118 bytes, Stack size 96 bytes, main.o(i.mx_07_select_track))
 <BR><BR>[Stack]<UL><LI>Max Depth = 168<LI>Call Chain = mx_07_select_track &rArr; Log &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Log
@@ -1703,7 +1703,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____machine_step
 </UL>
 
-<P><STRONG><a name="[126]"></a>mx_08_light_leds_for_shutdown_off</STRONG> (Thumb, 210 bytes, Stack size 24 bytes, main.o(i.mx_08_light_leds_for_shutdown_off))
+<P><STRONG><a name="[125]"></a>mx_08_light_leds_for_shutdown_off</STRONG> (Thumb, 210 bytes, Stack size 24 bytes, main.o(i.mx_08_light_leds_for_shutdown_off))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = mx_08_light_leds_for_shutdown_off
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -1711,94 +1711,64 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____machine_step
 </UL>
 
-<P><STRONG><a name="[127]"></a>mx_09_blink_power_led</STRONG> (Thumb, 40 bytes, Stack size 0 bytes, main.o(i.mx_09_blink_power_led))
+<P><STRONG><a name="[126]"></a>mx_09_blink_power_led</STRONG> (Thumb, 40 bytes, Stack size 0 bytes, main.o(i.mx_09_blink_power_led))
 <BR><BR>[Calls]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____machine_step
 </UL>
 
-<P><STRONG><a name="[119]"></a>mx_0_log_machine_settings</STRONG> (Thumb, 80 bytes, Stack size 152 bytes, main.o(i.mx_0_log_machine_settings))
+<P><STRONG><a name="[118]"></a>mx_0_log_machine_settings</STRONG> (Thumb, 80 bytes, Stack size 152 bytes, main.o(i.mx_0_log_machine_settings))
 <BR><BR>[Stack]<UL><LI>Max Depth = 224<LI>Call Chain = mx_0_log_machine_settings &rArr; Log &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Log
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_03_write_settings_to_eeprom
-<LI><a href="#[117]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_00_machine_init
+<BR>[Called By]<UL><LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_03_write_settings_to_eeprom
+<LI><a href="#[116]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_00_machine_init
 </UL>
 
-<P><STRONG><a name="[128]"></a>mx____INIT</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, main.o(i.mx____INIT))
-<BR><BR>[Stack]<UL><LI>Max Depth = 248<LI>Call Chain = mx____INIT &rArr; mx_00_machine_init &rArr; mx_0_log_machine_settings &rArr; Log &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<P><STRONG><a name="[d9]"></a>mx____machine_step</STRONG> (Thumb, 324 bytes, Stack size 32 bytes, main.o(i.mx____machine_step))
+<BR><BR>[Stack]<UL><LI>Max Depth = 320<LI>Call Chain = mx____machine_step &rArr; mx____CHECK_BUTTONS &rArr; mx_02_check_buttons_and_update_settings &rArr; mx_03_write_settings_to_eeprom &rArr; mx_0_log_machine_settings &rArr; Log &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_05_amp_on
-<LI><a href="#[117]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_00_machine_init
+<BR>[Calls]<UL><LI><a href="#[12b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xx_00_random_between
+<LI><a href="#[12c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_06_amp_off
+<LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_05_amp_on
+<LI><a href="#[126]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_09_blink_power_led
+<LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_08_light_leds_for_shutdown_off
+<LI><a href="#[124]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_07_select_track
+<LI><a href="#[123]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_06_light_leds_off
+<LI><a href="#[122]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_04_light_leds_by_settings
+<LI><a href="#[116]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_00_machine_init
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Log
-</UL>
-<BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____machine_step
-</UL>
-
-<P><STRONG><a name="[12a]"></a>mx____START</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, main.o(i.mx____START))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = mx____START &rArr; Log &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
-</UL>
-<BR>[Calls]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Log
-</UL>
-<BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____machine_step
-</UL>
-
-<P><STRONG><a name="[d9]"></a>mx____machine_step</STRONG> (Thumb, 502 bytes, Stack size 40 bytes, main.o(i.mx____machine_step))
-<BR><BR>[Stack]<UL><LI>Max Depth = 320<LI>Call Chain = mx____machine_step &rArr; mx_02_check_buttons_and_update_settings &rArr; mx_03_write_settings_to_eeprom &rArr; mx_0_log_machine_settings &rArr; Log &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
-</UL>
-<BR>[Calls]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
-<LI><a href="#[12c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xx_00_random_between
-<LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_06_amp_off
-<LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_05_amp_on
-<LI><a href="#[12a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____START
-<LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____INIT
-<LI><a href="#[127]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_09_blink_power_led
-<LI><a href="#[126]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_08_light_leds_for_shutdown_off
-<LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_07_select_track
-<LI><a href="#[124]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_06_light_leds_off
-<LI><a href="#[12b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_05_check_light
-<LI><a href="#[123]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_04_light_leds_by_settings
-<LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_03_write_settings_to_eeprom
-<LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_02_check_buttons_and_update_settings
-<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Log
+<LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____CHECK_LIGHTS
+<LI><a href="#[127]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____CHECK_BUTTONS
 </UL>
 <BR>[Called By]<UL><LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM7_IRQHandler
 </UL>
 
-<P><STRONG><a name="[114]"></a>pl_00_play_wav</STRONG> (Thumb, 238 bytes, Stack size 24 bytes, main.o(i.pl_00_play_wav))
+<P><STRONG><a name="[114]"></a>pl_00_play_wav</STRONG> (Thumb, 228 bytes, Stack size 24 bytes, main.o(i.pl_00_play_wav))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4400<LI>Call Chain = pl_00_play_wav &rArr; f_open &rArr; follow_path &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[106]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_read
 <LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_open
 <LI><a href="#[f5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_lseek
 <LI><a href="#[f0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_close
-<LI><a href="#[130]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Stop
+<LI><a href="#[12f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Stop
 <LI><a href="#[111]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Start
 <LI><a href="#[113]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DAC_Start
-<LI><a href="#[12f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_04_prepare_buffer
+<LI><a href="#[12e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_04_prepare_buffer
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_02_next_buf
-<LI><a href="#[12e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_00_play_wav_on_exit
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Log
+<LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_00_play_wav_on_exit
 </UL>
 <BR>[Called By]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-</UL>
-
-<P><STRONG><a name="[12e]"></a>pl_00_play_wav_on_exit</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, main.o(i.pl_00_play_wav_on_exit))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = pl_00_play_wav_on_exit &rArr; Log &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
-</UL>
-<BR>[Calls]<UL><LI><a href="#[111]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Start
-<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Log
-</UL>
-<BR>[Called By]<UL><LI><a href="#[114]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_00_play_wav
 </UL>
 
 <P><STRONG><a name="[115]"></a>pl_01_play_stop</STRONG> (Thumb, 58 bytes, Stack size 8 bytes, main.o(i.pl_01_play_stop))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = pl_01_play_stop &rArr; Log &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DAC_Stop_DMA
-<LI><a href="#[131]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DAC_Stop
+<LI><a href="#[130]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DAC_Stop
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Log
 <LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
 </UL>
@@ -1808,34 +1778,34 @@ Global Symbols
 <P><STRONG><a name="[81]"></a>pl_02_next_buf</STRONG> (Thumb, 96 bytes, Stack size 16 bytes, main.o(i.pl_02_next_buf))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = pl_02_next_buf &rArr; HAL_DAC_Start_DMA &rArr; HAL_DMA_Start_IT &rArr; DMA_SetConfig
 </UL>
-<BR>[Calls]<UL><LI><a href="#[130]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Stop
+<BR>[Calls]<UL><LI><a href="#[12f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Stop
 <LI><a href="#[111]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Start
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DAC_Stop_DMA
-<LI><a href="#[131]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DAC_Stop
+<LI><a href="#[130]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DAC_Stop
 <LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DAC_Start_DMA
 </UL>
 <BR>[Called By]<UL><LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA2_Channel4_5_IRQHandler
 <LI><a href="#[114]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_00_play_wav
 </UL>
 
-<P><STRONG><a name="[12f]"></a>pl_04_prepare_buffer</STRONG> (Thumb, 46 bytes, Stack size 12 bytes, main.o(i.pl_04_prepare_buffer))
+<P><STRONG><a name="[12e]"></a>pl_04_prepare_buffer</STRONG> (Thumb, 46 bytes, Stack size 12 bytes, main.o(i.pl_04_prepare_buffer))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = pl_04_prepare_buffer
 </UL>
 <BR>[Called By]<UL><LI><a href="#[114]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_00_play_wav
 </UL>
 
-<P><STRONG><a name="[129]"></a>pl_05_amp_on</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, main.o(i.pl_05_amp_on))
+<P><STRONG><a name="[128]"></a>pl_05_amp_on</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, main.o(i.pl_05_amp_on))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = pl_05_amp_on &rArr; HAL_DAC_Start
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 <LI><a href="#[113]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DAC_Start
-<LI><a href="#[116]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DAC_SetValue
+<LI><a href="#[131]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DAC_SetValue
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____machine_step
-<LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____INIT
+<LI><a href="#[127]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____CHECK_BUTTONS
 </UL>
 
-<P><STRONG><a name="[12d]"></a>pl_06_amp_off</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, main.o(i.pl_06_amp_off))
+<P><STRONG><a name="[12c]"></a>pl_06_amp_off</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, main.o(i.pl_06_amp_off))
 <BR><BR>[Calls]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____machine_step
@@ -1850,25 +1820,7 @@ Global Symbols
 <LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;create_chain
 </UL>
 
-<P><STRONG><a name="[132]"></a>sort_inc_group</STRONG> (Thumb, 46 bytes, Stack size 12 bytes, main.o(i.sort_inc_group))
-<BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = sort_inc_group
-</UL>
-<BR>[Called By]<UL><LI><a href="#[11e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;toggle_group
-</UL>
-
-<P><STRONG><a name="[11e]"></a>toggle_group</STRONG> (Thumb, 86 bytes, Stack size 8 bytes, main.o(i.toggle_group))
-<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = toggle_group &rArr; sort_inc_group
-</UL>
-<BR>[Calls]<UL><LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sort_inc_group
-</UL>
-<BR>[Called By]<UL><LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_02_check_buttons_and_update_settings
-</UL>
-
-<P><STRONG><a name="[11c]"></a>validate_button_pressed</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, main.o(i.validate_button_pressed))
-<BR><BR>[Called By]<UL><LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_02_check_buttons_and_update_settings
-</UL>
-
-<P><STRONG><a name="[12c]"></a>xx_00_random_between</STRONG> (Thumb, 90 bytes, Stack size 104 bytes, main.o(i.xx_00_random_between))
+<P><STRONG><a name="[12b]"></a>xx_00_random_between</STRONG> (Thumb, 90 bytes, Stack size 104 bytes, main.o(i.xx_00_random_between))
 <BR><BR>[Stack]<UL><LI>Max Depth = 176<LI>Call Chain = xx_00_random_between &rArr; Log &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[133]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DAC_GetValue
@@ -1915,6 +1867,54 @@ Local Symbols
 <LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+</UL>
+
+<P><STRONG><a name="[127]"></a>mx____CHECK_BUTTONS</STRONG> (Thumb, 106 bytes, Stack size 16 bytes, main.o(i.mx____CHECK_BUTTONS))
+<BR><BR>[Stack]<UL><LI>Max Depth = 288<LI>Call Chain = mx____CHECK_BUTTONS &rArr; mx_02_check_buttons_and_update_settings &rArr; mx_03_write_settings_to_eeprom &rArr; mx_0_log_machine_settings &rArr; Log &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+</UL>
+<BR>[Calls]<UL><LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_05_amp_on
+<LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_03_write_settings_to_eeprom
+<LI><a href="#[119]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_02_check_buttons_and_update_settings
+<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Log
+</UL>
+<BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____machine_step
+</UL>
+
+<P><STRONG><a name="[129]"></a>mx____CHECK_LIGHTS</STRONG> (Thumb, 118 bytes, Stack size 16 bytes, main.o(i.mx____CHECK_LIGHTS))
+<BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = mx____CHECK_LIGHTS &rArr; Log &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+</UL>
+<BR>[Calls]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
+<LI><a href="#[12a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_05_check_light
+<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Log
+</UL>
+<BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx____machine_step
+</UL>
+
+<P><STRONG><a name="[12d]"></a>pl_00_play_wav_on_exit</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, main.o(i.pl_00_play_wav_on_exit))
+<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = pl_00_play_wav_on_exit &rArr; Log &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+</UL>
+<BR>[Calls]<UL><LI><a href="#[111]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Start
+<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Log
+</UL>
+<BR>[Called By]<UL><LI><a href="#[114]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pl_00_play_wav
+</UL>
+
+<P><STRONG><a name="[132]"></a>sort_inc_group</STRONG> (Thumb, 46 bytes, Stack size 12 bytes, main.o(i.sort_inc_group))
+<BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = sort_inc_group
+</UL>
+<BR>[Called By]<UL><LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;toggle_group
+</UL>
+
+<P><STRONG><a name="[11d]"></a>toggle_group</STRONG> (Thumb, 86 bytes, Stack size 8 bytes, main.o(i.toggle_group))
+<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = toggle_group &rArr; sort_inc_group
+</UL>
+<BR>[Calls]<UL><LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sort_inc_group
+</UL>
+<BR>[Called By]<UL><LI><a href="#[119]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_02_check_buttons_and_update_settings
+</UL>
+
+<P><STRONG><a name="[11b]"></a>validate_button_pressed</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, main.o(i.validate_button_pressed))
+<BR><BR>[Called By]<UL><LI><a href="#[119]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mx_02_check_buttons_and_update_settings
 </UL>
 
 <P><STRONG><a name="[9d]"></a>NVIC_SetPriority</STRONG> (Thumb, 32 bytes, Stack size 0 bytes, stm32f1xx_hal_cortex.o(i.NVIC_SetPriority))

@@ -131,13 +131,14 @@ enum Random {NOTRANDOM, RANDOM};
 
 // PAUSE PERIODS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 enum DelayPool {DELAY_POOL_0 = 0, DELAY_POOL_1 = 1, DELAY_POOL_2 = 2, DELAY_POOL_3 = 3};
-uint16_t delay_pool_bounds[4][2] = {{10, 15}, {20, 30}, {40, 50}, {60, 70}}; 
-//uint16_t delay_pool_bounds[4][2] = {{10, 60}, {60, 240}, {240, 600}, {600, 1800}}; 
+//uint16_t delay_pool_bounds[4][2] = {{10, 15}, {20, 30}, {40, 50}, {60, 70}}; 
+uint16_t delay_pool_bounds[4][2] = {{10, 60}, {60, 240}, {240, 600}, {600, 1800}}; 
 
 
 #define DELAY_TIMER_NO_SET 0
 enum TimePlayMode {DAY = 0, NIGHT, DAY_AND_NIGHT};
 volatile char 		is_need_play = FALSE;
+#define next_track_MAX_VALUE 65535 
 volatile static uint16_t next_track = 0;
 volatile uint16_t need_paly_track_number = 0;
 //----------------------------------------------------------------------------
@@ -168,10 +169,11 @@ enum BUTTONS {BUTTON_POWER = 0,
 							BUTTON_GROUP_9
 };
 #define BUTTONS_COUNT 14
-volatile GPIO_PinState last_button_state[BUTTONS_COUNT] = {0};
+volatile GPIO_PinState last_button_state[BUTTONS_COUNT];
 
 #define BUTTON_PRESSED GPIO_PIN_RESET
 #define BUTTON_NOT_PRESSED GPIO_PIN_SET
+
 //============================================================================
 //	DEFINES			DEFINES			DEFINES			DEFINES			DEFINES			DEFINES						
 //============================================================================																		
@@ -232,7 +234,7 @@ uint16_t fl_05_read_data(uint32_t);
 //============================================================================
 enum States {INIT, START, CHECK_BUTTONS, LIGHT_LEDS, CHECK_LIGHTS, CHECK_PLAY, SELECT_DELAY, MAKE_DELAY, SELECT_WAV, PLAY, STOP, SHUTING_DOWN, POWER_OFF};
 //============================================================================
-char mx____INIT(){
+inline char mx____INIT(){
 	Log("-- INIT --\n\r");
 	mx_00_machine_init();
 	//mx_04_light_leds_by_settings();	
@@ -240,7 +242,7 @@ char mx____INIT(){
 	return START;
 }
 //============================================================================
-char mx____START(uint32_t * timer){
+inline char mx____START(uint32_t * timer){
 	Log("-- START --\n\r");
 	//return LIGHT_LEDS;
 	//return SELECT_WAV;
@@ -249,12 +251,168 @@ char mx____START(uint32_t * timer){
   return MAKE_DELAY;
 }
 //============================================================================
-void mx____machine_step(){ // poll every 10ms
+static inline char mx____CHECK_BUTTONS(){
+	#ifdef FULLOGDEFINE
+		Log("-- CHECK_BUTTONS --\n\r");
+	#endif
+	char state = CHECK_BUTTONS;
+	
+	mx_02_check_buttons_and_update_settings();
+
+	static char is_power_on_lstate = FALSE;
+	
+	if (machine_settings.is_power_on == FALSE){
+		if (is_power_on_lstate == TRUE) {
+			state = SHUTING_DOWN;
+		}else{
+			state = POWER_OFF;
+		}
+		is_power_on_lstate = machine_settings.is_power_on;
+		return state;
+	}
+	
+	// if we are here we are on-line
+	
+	if(is_power_on_lstate == FALSE){
+		Log("---- WAIKE UP --\n\r");
+		is_power_on_lstate = machine_settings.is_power_on;
+		pl_05_amp_on(); 
+		state = LIGHT_LEDS;	
+		
+		if (machine_settings.is_random == RANDOM){
+			Log("------ IN RANDOM --\n\r");
+			state = SELECT_WAV;
+		}else{
+			Log("------ IN 0 TRACK --\n\r");
+			next_track = next_track_MAX_VALUE;
+			state = SELECT_WAV;
+			//next_track = 0;
+			//mx_07_select_track(next_track);
+			//state = PLAY;
+		}
+		//state = SELECT_WAV;
+		//state = MAKE_DELAY;
+		return state;
+	}
+	
+	is_power_on_lstate = machine_settings.is_power_on;
+
+	if (machine_settings.is_updated == TRUE){
+		mx_03_write_settings_to_eeprom();
+		machine_settings.is_updated = FALSE;
+		return LIGHT_LEDS;
+	}
+	
+	return CHECK_LIGHTS;
+}
+//============================================================================
+static inline char mx____CHECK_LIGHTS(){
+	#ifdef FULLOGDEFINE
+	Log("-- CHECK_LIGHTS --\n\r");
+	#endif
+
+	char light = mx_05_check_light();
+	static char is_need_go_start = TRUE;
+	
+	if(light == DAY && machine_settings.time_play_mode == NIGHT){
+		is_need_play = FALSE;
+		is_need_go_start = TRUE;
+		return CHECK_BUTTONS;
+	}		
+	
+	if(light == NIGHT && machine_settings.time_play_mode == DAY){
+		is_need_play = FALSE;
+		is_need_go_start = TRUE;
+		return CHECK_BUTTONS;
+	}
+	
+	if (machine_settings.time_play_mode == DAY_AND_NIGHT){
+		if (light == DAY){
+			HAL_GPIO_WritePin(PORT_LED_MODE_DAY, PIN_LED_MODE_DAY, GPIO_PIN_SET);	
+			HAL_GPIO_WritePin(PORT_LED_MODE_NIGHT, PIN_LED_MODE_NIGHT, GPIO_PIN_RESET);	
+		}
+		if (light == NIGHT){
+			HAL_GPIO_WritePin(PORT_LED_MODE_DAY, PIN_LED_MODE_DAY, GPIO_PIN_RESET);	
+			HAL_GPIO_WritePin(PORT_LED_MODE_NIGHT, PIN_LED_MODE_NIGHT, GPIO_PIN_SET);	
+		}
+	}
+	
+	if (is_need_go_start == TRUE){
+		is_need_go_start = FALSE;
+		return START;
+	}
+	
+	return CHECK_PLAY;
+}
+//============================================================================
+static inline char mx____SELECT_WAV(){
+	Log("-- SELECT_WAV --\n\r");
+	
+	if(machine_settings.selected_groups_count == 0){
+		return CHECK_BUTTONS;
+	}
+	
+	if (machine_settings.is_random == RANDOM){
+		next_track = xx_00_random_between(0, machine_settings.total_track_count);
+		mx_07_select_track(next_track);
+		return PLAY;
+	}
+	
+	if (next_track++ >= machine_settings.total_track_count){
+		next_track = 0;
+	}
+	
+	mx_07_select_track(next_track);
+	
+	return PLAY;
+}
+//============================================================================
+inline char mx____SELECT_DELAY(uint32_t * timer){
+	//#ifdef FULLOGDEFINE
+		Log("-- SELECT_DELAY --\n\r");
+	//#endif
+	if (*timer == DELAY_TIMER_NO_SET){
+		Log("-- SELECT new read delay in SELECT DELAY --\n\r");
+		*timer = xx_00_random_between(	delay_pool_bounds[machine_settings.delay_pool][0], 
+																	delay_pool_bounds[machine_settings.delay_pool][1]);
+		(*timer) *= 10;
+	}
+	return MAKE_DELAY;
+}
+//============================================================================
+inline char mx____MAKE_DELAY(uint32_t * timer){
+	#ifdef FULLOGDEFINE
+		Log("-- MAKE_DELAY --\n\r");
+	#endif
+	if(--(*timer) == DELAY_TIMER_NO_SET){ // time to play next
+		return SELECT_WAV;
+	}
+	return CHECK_BUTTONS;
+}
+//============================================================================
+inline char mx____SHUTING_DOWN(void){ 
+	Log("-- SHUTING_DOWN --\n\r");
+	is_need_play = FALSE;
+	mx_08_light_leds_for_shutdown_off();	
+	pl_06_amp_off();
+	if (thread_player_is_runing == TRUE){
+		mx_09_blink_power_led();
+		return SHUTING_DOWN;
+	}else{
+		mx_06_light_leds_off();	
+		return POWER_OFF;
+	}
+}
+//============================================================================
+//============================================================================
+void mx____machine_step(){ 
+	// poll every 10ms from "TIM7_IRQHandler" from "stm32f1xx_it.c"
+	
 	//HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);	
   //static uint32_t timer = DELAY_TIMER_NO_SET;
+
 	static uint32_t timer = 10;
 	static char state = INIT;
-	
 	
 	switch (state){
 		case INIT:
@@ -266,54 +424,7 @@ void mx____machine_step(){ // poll every 10ms
 			break;
 		
 		case CHECK_BUTTONS: 
-			#ifdef FULLOGDEFINE
-				Log("-- CHECK_BUTTONS --\n\r");
-		  #endif
-			mx_02_check_buttons_and_update_settings();
-			{
-				static char is_power_on_lstate = FALSE;
-				
-				if (machine_settings.is_power_on == FALSE){
-					if (is_power_on_lstate == TRUE) {
-						state = SHUTING_DOWN;
-					}else{
-						state = POWER_OFF;
-					}
-					is_power_on_lstate = machine_settings.is_power_on;
-					break;
-				}else{
-					if(is_power_on_lstate == FALSE){
-						Log("---- WAIKE UP --\n\r");
-						is_power_on_lstate = machine_settings.is_power_on;
-						pl_05_amp_on(); 
-						state = LIGHT_LEDS;	
-						
-						if (machine_settings.is_random == RANDOM){
-							Log("------ IN RANDOM --\n\r");
-							state = SELECT_WAV;
-						}else{
-							Log("------ IN 0 TRACK --\n\r");
-							next_track = -1;
-							state = SELECT_WAV;
-							//next_track = 0;
-							//mx_07_select_track(next_track);
-							//state = PLAY;
-						}
-						//state = SELECT_WAV;
-						//state = MAKE_DELAY;
-						break;
-					}
-					is_power_on_lstate = machine_settings.is_power_on;
-				}	
-			}
-		
-			if (machine_settings.is_updated == TRUE){
-				mx_03_write_settings_to_eeprom();
-				machine_settings.is_updated = FALSE;
-				state = LIGHT_LEDS;
-				break;
-			}
-			state = CHECK_LIGHTS;
+			state = mx____CHECK_BUTTONS();
 			break;
 			
 		case LIGHT_LEDS:
@@ -323,46 +434,7 @@ void mx____machine_step(){ // poll every 10ms
 			break;
 		
 		case CHECK_LIGHTS:
-			#ifdef FULLOGDEFINE
-			  Log("-- CHECK_LIGHTS --\n\r");
-		  #endif
-		{
-			char light = mx_05_check_light();
-			static char is_need_go_start = TRUE;
-			
-			if(light == DAY && machine_settings.time_play_mode == NIGHT){
-				state = 	CHECK_BUTTONS;
-				is_need_play = FALSE;
-				is_need_go_start = TRUE;
-				break;
-			}		
-			
-			if(light == NIGHT && machine_settings.time_play_mode == DAY){
-				state = 	CHECK_BUTTONS;
-				is_need_play = FALSE;
-				is_need_go_start = TRUE;
-				break;
-			}
-			
-			if (machine_settings.time_play_mode == DAY_AND_NIGHT){
-				if (light == DAY){
-					HAL_GPIO_WritePin(PORT_LED_MODE_DAY, PIN_LED_MODE_DAY, GPIO_PIN_SET);	
-					HAL_GPIO_WritePin(PORT_LED_MODE_NIGHT, PIN_LED_MODE_NIGHT, GPIO_PIN_RESET);	
-				}
-				if (light == NIGHT){
-					HAL_GPIO_WritePin(PORT_LED_MODE_DAY, PIN_LED_MODE_DAY, GPIO_PIN_RESET);	
-					HAL_GPIO_WritePin(PORT_LED_MODE_NIGHT, PIN_LED_MODE_NIGHT, GPIO_PIN_SET);	
-				}
-			}
-			
-			if (is_need_go_start == TRUE){
-				is_need_go_start = FALSE;
-				state = START;
-				break;
-			}
-		}
-			
-			state = CHECK_PLAY;
+			state = mx____CHECK_LIGHTS();
 			break;
 				
 		case CHECK_PLAY:
@@ -372,85 +444,43 @@ void mx____machine_step(){ // poll every 10ms
 		
 			if (is_need_play == TRUE){
 				state = CHECK_BUTTONS;
-				//HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);	
 			}else{
 				state = SELECT_DELAY;
-				//HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
 			}
 		break;
 		
 		case SELECT_DELAY:
-			#ifdef FULLOGDEFINE
-			  Log("-- SELECT_DELAY --\n\r");
-		  #endif
-			if (timer == DELAY_TIMER_NO_SET){
-				Log("-- SELECT new read delay in SELECT DELAY --\n\r");
-				timer = xx_00_random_between(	delay_pool_bounds[machine_settings.delay_pool][0], 
-																			delay_pool_bounds[machine_settings.delay_pool][1]);
-				timer *= 10;
-			}
-			state = MAKE_DELAY;
+			state = mx____SELECT_DELAY(&timer);
 			break;
 			
 		case MAKE_DELAY:
-			#ifdef FULLOGDEFINE
-			  Log("-- MAKE_DELAY --\n\r");
-		  #endif
-			if(--timer == DELAY_TIMER_NO_SET){ // time to play next
-				state = SELECT_WAV;
-			}else{
-				state = CHECK_BUTTONS;
-			}
+			state = mx____MAKE_DELAY(&timer);
 			break;
 			
 		case SELECT_WAV:
-			Log("-- SELECT_WAV --\n\r");
-		
-		{
-			if(machine_settings.selected_groups_count == 0){
-				state = CHECK_BUTTONS;
-				break;
-			}
-			
-			//static uint16_t next_track = -1;
-			if (machine_settings.is_random == RANDOM){
-				next_track = xx_00_random_between(0, machine_settings.total_track_count);
-			}else{
-				if (next_track++ >= machine_settings.total_track_count){
-					next_track = 0;
-				}
-			}
-			
-			mx_07_select_track(next_track);
-		}
-			state = PLAY;
+			state = mx____SELECT_WAV();
 			break;
-	
+
 		case PLAY:
 			Log("-- PLAY --\n\r");
 			is_need_play = TRUE;
+			timer = DELAY_TIMER_NO_SET;
 			state = CHECK_BUTTONS;
 			break;
+		
 		case STOP:
 			break;
+		
 		case SHUTING_DOWN:
-			Log("-- SHUTING_DOWN --\n\r");
-		  is_need_play = FALSE;
-			mx_08_light_leds_for_shutdown_off();	
-		  pl_06_amp_off();
-			if (thread_player_is_runing == TRUE){
-				mx_09_blink_power_led();
-				state = SHUTING_DOWN;
-			}else{
-				mx_06_light_leds_off();	
-				state = POWER_OFF;
-			}
+			state = mx____SHUTING_DOWN();
 		  break;
+			
 		case POWER_OFF:
 			Log("-- POWER_OFF --\n\r");
 		  // sleep? wait?
 			state = CHECK_BUTTONS;
 			break;
+		
 		default:
 			break;
 	}
@@ -525,23 +555,23 @@ int main(void)
 	//pl_00_play_fake_wav();
   while (1)
   {
-			if (is_need_play == TRUE){
-				thread_player_is_runing = TRUE;
-				char fname[64] = {0};
-				sprintf(fname, "%04d.WAV", need_paly_track_number);
-				
-				Log("++++ try to play ");
-				Log(fname);
-				Log("\n\r\n\r");
-				//HAL_TIM_Base_Start(&htim6);
-				pl_00_play_wav(fname);
-				pl_01_play_stop();
-				
-				is_need_play = FALSE;
-				HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2,DAC_ALIGN_12B_R, 2048);
-				HAL_DAC_Start(&hdac, DAC_CHANNEL_2);
-				thread_player_is_runing = FALSE;
-			}
+		if (is_need_play == TRUE){
+			thread_player_is_runing = TRUE;
+			char fname[64] = {0};
+			sprintf(fname, "%04d.WAV", need_paly_track_number);
+			
+			Log("++++ try to play ");
+			Log(fname);
+			Log("\n\r\n\r");
+			//HAL_TIM_Base_Start(&htim6);
+			pl_00_play_wav(fname);
+			pl_01_play_stop();
+			
+			is_need_play = FALSE;
+			//HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2,DAC_ALIGN_12B_R, 2048);
+			//HAL_DAC_Start(&hdac, DAC_CHANNEL_2);
+			thread_player_is_runing = FALSE;
+		}
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
@@ -873,16 +903,18 @@ static void MX_GPIO_Init(void)
 //==========================================================================================
 //	MY FUNCK		MY FUNCK		MY FUNCK		MY FUNCK		MY FUNCK		MY FUNCK		MY FUNCK
 //==========================================================================================
-void pl_00_play_wav_on_exit(){
+static inline void pl_00_play_wav_on_exit(){
 		need_stop = 1;
 		HAL_TIM_Base_Start(&htim7);
 		Log("Stop Play\n\r");
 }
 void pl_00_play_wav(char * filename){
+	// called from main if need play and file found on sdcard
 	
 	if(f_open(&file, filename, FA_READ) != FR_OK){
 		Log("open read error\n\r");
 		pl_00_play_wav_on_exit();
+		return;
 	}	
 	Log("open read ok\n\r");
 
@@ -890,6 +922,7 @@ void pl_00_play_wav(char * filename){
 		Log("lseek error\n\r");
 		f_close(&file);		
 		pl_00_play_wav_on_exit();
+		return;
 	}
 	Log("lseek ok\n\r");
 				
@@ -899,7 +932,7 @@ void pl_00_play_wav(char * filename){
 	// START PLAY
 	// HAL_TIM_Base_Start(&htim6);
 	
-	if(f_read(&file, buff[cur_buff], bufflen*2, &bytesread) == FR_OK){
+	if(f_read(&file, (void *)buff[cur_buff], bufflen*2, &bytesread) == FR_OK){
 		HAL_DAC_Start(&hdac, DAC_CHANNEL_2);
 		pl_04_prepare_buffer(bufflen);
 		need_stop = 0;
@@ -910,16 +943,28 @@ void pl_00_play_wav(char * filename){
 	}else{
 			// ERROR MAY BE ??
 		Log("! ! ! ! f_read error\n\r");
+		f_close(&file);
+		pl_00_play_wav_on_exit();
+		return;
 	}
 		
-	// START PREPARE BYFFER
-	while ((f_read(&file, buff[cur_buff], bufflen*2, &bytesread) == FR_OK)
-					&&
-					(bytesread == bufflen*2)
-					&&
-					need_stop != 1)
+	// START PREPARE BYFFER and PLAY
+	while (	need_stop != 1)
 	{
-		
+		if (f_read(&file, (void *)buff[cur_buff], bufflen*2, &bytesread) != FR_OK){
+			Log("! ! ! ! in while f_read error\n\r");
+			f_close(&file);
+			pl_00_play_wav_on_exit();
+			return;		 
+		}
+			 
+		if (bytesread != bufflen*2){
+			Log("! ! ! ! end of file. time to exit\n\r");
+			f_close(&file);
+			pl_00_play_wav_on_exit();
+			return;		 
+		}
+		 
 			HAL_TIM_Base_Start(&htim7);
 			pl_04_prepare_buffer(bufflen);
 			need_update_buffer  = 0;
@@ -961,51 +1006,21 @@ void pl_01_play_stop(){
 	//HAL_TIM_Base_Stop(&htim6);
 	cur_buff=0;
 	
-	memset(buff[0], 0, BUFFLEN*2);
-	memset(buff[1], 0, BUFFLEN*2);
+	memset((void*)buff[0], 0, BUFFLEN*2);
+	memset((void*)buff[1], 0, BUFFLEN*2);
 }
 //==========================================================================================
 void pl_02_next_buf(){
+	// called from "DMA2_Channel4_5_IRQHandler" from "stm32f1xx_it.c"
 	if (need_stop){ 
 		HAL_DAC_Stop_DMA(&hdac, DAC_CHANNEL_2);
 		HAL_DAC_Stop(&hdac, DAC_CHANNEL_2);
 		return;
 	}
 
-	/*
-	HAL_UART_Transmit(&huart3, (uint8_t *)buff[cur_buff], buff_play_len[cur_buff]*2, 1000);
-	Log("                ");
-	*/
-	/*
-	if (buff[cur_buff][buff_play_len[cur_buff] - 3] == 0)
-	{
-		need_stop = 1;
-		char st[64];
-		sprintf(st, "EXIT buff[cur_buff][buff_play_len[cur_buff] - 3] = %d \n\r", 
-		buff[cur_buff][buff_play_len[cur_buff] - 3]);
-		Log(st);
-		return;
-	}
-	*/
-	/*
-	uint64_t bfavr = 0;
-	for (int i = 0; i < buff_play_len[cur_buff]; i++){
-			bfavr += buff[cur_buff][i];
-	}
-	
-	if (bfavr / buff_play_len[cur_buff] < (1024 << 4)) {
-		HAL_DAC_Stop_DMA(&hdac, DAC_CHANNEL_2);
-		HAL_DAC_Stop(&hdac, DAC_CHANNEL_2);
-		need_stop = TRUE;
-		return;
-	}
-	*/
-	
-	/*
-	HAL_UART_Transmit(&huart3, (uint8_t *)buff[cur_buff], buff_play_len[cur_buff]*2, 1000);
-	Log("                ");
-	*/
 	HAL_TIM_Base_Stop(&htim6);
+	// from buffer to DigitalAnalogConvertor over DirectMemoryAccess
+	// i dont know why, but we send 16bit buffer like 32bit array and send his length in bytes... 
 	HAL_DAC_Start_DMA(&hdac, DAC_CHANNEL_2, (uint32_t*)buff[cur_buff], buff_play_len[cur_buff]*2, DAC_ALIGN_12B_L);
 	HAL_TIM_Base_Start(&htim6);
 	cur_buff++;
@@ -1086,6 +1101,10 @@ void pl_04_prepare_buffer(int len){
 	char n = cur_buff;
 	for (int i = 0; i < len; i++){
 		buff[n][i] = buff[n][i] + addon;
+		//buff[n][i] = buff[n][i] >> 12;
+		//buff[n][i] = buff[n][i] + (2047 << 4); // 2047 = 0b 0111 1111 1111
+		//buff[n][i] = buff[n][i] + (1023 << 4); // 1023 = 0b 0011 1111 1111
+		//buff[n][i] = buff[n][i] + (4095 << 4); // 4095 = 0b 1111 1111 1111
 	};
 	buff_play_len[n] = len;	
 	
@@ -1228,21 +1247,22 @@ void mx_01_read_settings_from_eeprom()
 	machine_settings.is_updated = TRUE;
 }
 //==========================================================================================
-char validate_button_pressed(int i, GPIO_PinState cur_pin_state){
+static inline char validate_button_pressed(int i, GPIO_PinState cur_pin_state){
   if (last_button_state[i] == cur_pin_state){
 		return FALSE;
-  }else{
-		if (last_button_state[i] == BUTTON_PRESSED && cur_pin_state == BUTTON_NOT_PRESSED){
-			last_button_state[i] = cur_pin_state;
-			return TRUE;
-		}else{
-			last_button_state[i] = cur_pin_state;
-			return FALSE;
-		}
   }
+	
+	if (last_button_state[i] == BUTTON_PRESSED && cur_pin_state == BUTTON_NOT_PRESSED){
+		last_button_state[i] = cur_pin_state;
+		return TRUE;
+	}else{
+		last_button_state[i] = cur_pin_state;
+		return FALSE;
+	}
+
 }
 //-----------------------------------------------
-void sort_inc_group(){
+static inline void sort_inc_group(){
 	for ( int i = 0 ; i < machine_settings.selected_groups_count; i++){
 		for (int j = 0; j < machine_settings.selected_groups_count-1; j++){
 			if (machine_settings.selected_groups[j] > 
@@ -1255,7 +1275,7 @@ void sort_inc_group(){
 	}
 }
 //-------------------------------------------------------------------------
-void toggle_group (char group_number){
+static inline void toggle_group (char group_number){
   if (files_count[group_number] == 0){
     return; // no files in this group
   }
@@ -1301,117 +1321,112 @@ void toggle_group (char group_number){
 	*/
 }
 //-------------------------------------------------------------------------
-void mx_02_check_buttons_and_update_settings(){
-for (int i = 0; i < BUTTONS_COUNT; i++){
-  switch(i){
-    case BUTTON_POWER:
-      if ( validate_button_pressed (i, HAL_GPIO_ReadPin(PORT_BUTTON_POWER, PIN_BUTTON_POWER)) == TRUE){
-        if (machine_settings.is_power_on == TRUE){
-					machine_settings.is_power_on = FALSE;
-					machine_settings.is_updated = TRUE;
-				}else{
-					machine_settings.is_power_on = TRUE;
-				}
-				mx_03_write_settings_to_eeprom();
-				//Log("BUTTON_POWER pressed\n\r");
-      }
-    break;
-	
-    case BUTTON_RANDOM:
-      if ( validate_button_pressed (i, HAL_GPIO_ReadPin(PORT_BUTTON_RANDOM, PIN_BUTTON_RANDOM)) == TRUE){
-        if (machine_settings.is_random == RANDOM){
-          machine_settings.is_random = NOTRANDOM;
-					next_track = -1;
-					//mx_07_select_track(next_track);
-        }else{
-          machine_settings.is_random = RANDOM;
-        }
-        machine_settings.is_updated = TRUE;
-      }
-    break;
-	
-    case BUTTON_PAUSE:
-      if ( validate_button_pressed (i, HAL_GPIO_ReadPin(PORT_BUTTON_PAUSE, PIN_BUTTON_PAUSE)) == TRUE){
-        machine_settings.delay_pool++;
-				if (machine_settings.delay_pool > DELAY_POOL_3){
-					machine_settings.delay_pool = DELAY_POOL_0;
-				}
-        machine_settings.is_updated = TRUE;
-      }
-    break;
-	
-    case BUTTON_MODE:
-      if ( validate_button_pressed (i, HAL_GPIO_ReadPin(PORT_BUTTON_MODE, PIN_BUTTON_MODE)) == TRUE){
-        machine_settings.time_play_mode++;
-		if (machine_settings.time_play_mode > DAY_AND_NIGHT){
-		  machine_settings.time_play_mode = DAY;
+void mx_02_check_buttons_and_update_settings(void){
+
+  //case BUTTON_POWER:
+	if ( validate_button_pressed (BUTTON_POWER, HAL_GPIO_ReadPin(PORT_BUTTON_POWER, PIN_BUTTON_POWER)) == TRUE){
+		if (machine_settings.is_power_on == TRUE){
+			machine_settings.is_power_on = FALSE;
+			machine_settings.is_updated = TRUE;
+		}else{
+			machine_settings.is_power_on = TRUE;
 		}
-        machine_settings.is_updated = TRUE;
-      }
-    break;
+		mx_03_write_settings_to_eeprom();
+		#ifdef FULLOGDEFINE
+			Log("BUTTON_POWER pressed\n\r");
+		#endif
+	}
+
+	//case BUTTON_RANDOM:
+	if ( validate_button_pressed (BUTTON_RANDOM, HAL_GPIO_ReadPin(PORT_BUTTON_RANDOM, PIN_BUTTON_RANDOM)) == TRUE){
+		if (machine_settings.is_random == RANDOM){
+			machine_settings.is_random = NOTRANDOM;
+			next_track = next_track_MAX_VALUE;
+			//mx_07_select_track(next_track);
+		}else{
+			machine_settings.is_random = RANDOM;
+		}
+		machine_settings.is_updated = TRUE;
+	}
+			
+	//case BUTTON_PAUSE:
+	if ( validate_button_pressed (BUTTON_PAUSE, HAL_GPIO_ReadPin(PORT_BUTTON_PAUSE, PIN_BUTTON_PAUSE)) == TRUE){
+		machine_settings.delay_pool++;
+		if (machine_settings.delay_pool > DELAY_POOL_3){
+			machine_settings.delay_pool = DELAY_POOL_0;
+		}
+		machine_settings.is_updated = TRUE;
+	}
+    	
+	//case BUTTON_MODE:
+	if ( validate_button_pressed (BUTTON_MODE, HAL_GPIO_ReadPin(PORT_BUTTON_MODE, PIN_BUTTON_MODE)) == TRUE){
+		machine_settings.time_play_mode++;
+		if (machine_settings.time_play_mode > DAY_AND_NIGHT){
+			machine_settings.time_play_mode = DAY;
+		}
+			machine_settings.is_updated = TRUE;
+	}
 	
-    case BUTTON_GROUP_0:
-      if ( validate_button_pressed (i, HAL_GPIO_ReadPin(PORT_BUTTON_GROUP_0, PIN_BUTTON_GROUP_0)) == TRUE){
-        toggle_group(0);
-        machine_settings.is_updated = TRUE;
-      }
-    break;
-    case BUTTON_GROUP_1:
-     if ( validate_button_pressed (i, HAL_GPIO_ReadPin(PORT_BUTTON_GROUP_1, PIN_BUTTON_GROUP_1)) == TRUE){
-        toggle_group(1);
-        machine_settings.is_updated = TRUE;
-      }
-    break;
-    case BUTTON_GROUP_2:
-      if ( validate_button_pressed (i, HAL_GPIO_ReadPin(PORT_BUTTON_GROUP_2, PIN_BUTTON_GROUP_2)) == TRUE){
-        toggle_group(2);
-        machine_settings.is_updated = TRUE;
-      }
-    break;
-    case BUTTON_GROUP_3:
-      if ( validate_button_pressed (i, HAL_GPIO_ReadPin(PORT_BUTTON_GROUP_3, PIN_BUTTON_GROUP_3)) == TRUE){
-        toggle_group(3);
-        machine_settings.is_updated = TRUE;
-      }
-    break;
-    case BUTTON_GROUP_4:
-      if ( validate_button_pressed (i, HAL_GPIO_ReadPin(PORT_BUTTON_GROUP_4, PIN_BUTTON_GROUP_4)) == TRUE){
-        toggle_group(4);
-        machine_settings.is_updated = TRUE;
-      }
-    break;
-    case BUTTON_GROUP_5:
-      if ( validate_button_pressed (i, HAL_GPIO_ReadPin(PORT_BUTTON_GROUP_5, PIN_BUTTON_GROUP_5)) == TRUE){
-        toggle_group(5);
-        machine_settings.is_updated = TRUE;
-      }
-    break;
-    case BUTTON_GROUP_6:
-      if ( validate_button_pressed (i, HAL_GPIO_ReadPin(PORT_BUTTON_GROUP_6, PIN_BUTTON_GROUP_6)) == TRUE){
-        toggle_group(6);
-        machine_settings.is_updated = TRUE;
-      }
-    break;
-    case BUTTON_GROUP_7:
-      if ( validate_button_pressed (i, HAL_GPIO_ReadPin(PORT_BUTTON_GROUP_7, PIN_BUTTON_GROUP_7)) == TRUE){
-        toggle_group(7);
-        machine_settings.is_updated = TRUE;
-      }
-    break;
-    case BUTTON_GROUP_8:
-       if ( validate_button_pressed (i, HAL_GPIO_ReadPin(PORT_BUTTON_GROUP_8, PIN_BUTTON_GROUP_8)) == TRUE){
-        toggle_group(8);
-        machine_settings.is_updated = TRUE;
-      }
-   break;
-    case BUTTON_GROUP_9:
-       if ( validate_button_pressed (i, HAL_GPIO_ReadPin(PORT_BUTTON_GROUP_9, PIN_BUTTON_GROUP_9)) == TRUE){
-        toggle_group(9);
-        machine_settings.is_updated = TRUE;
-      }
-   break;
-  }
-}	
+//case BUTTON_GROUP_0:
+	if ( validate_button_pressed (BUTTON_GROUP_0, HAL_GPIO_ReadPin(PORT_BUTTON_GROUP_0, PIN_BUTTON_GROUP_0)) == TRUE){
+		toggle_group(0);
+		machine_settings.is_updated = TRUE;
+	}
+
+	//case BUTTON_GROUP_1:
+ if ( validate_button_pressed (BUTTON_GROUP_1, HAL_GPIO_ReadPin(PORT_BUTTON_GROUP_1, PIN_BUTTON_GROUP_1)) == TRUE){
+		toggle_group(1);
+		machine_settings.is_updated = TRUE;
+	}
+
+	//case BUTTON_GROUP_2:
+	if ( validate_button_pressed (BUTTON_GROUP_2, HAL_GPIO_ReadPin(PORT_BUTTON_GROUP_2, PIN_BUTTON_GROUP_2)) == TRUE){
+		toggle_group(2);
+		machine_settings.is_updated = TRUE;
+	}
+
+	//case BUTTON_GROUP_3:
+	if ( validate_button_pressed (BUTTON_GROUP_3, HAL_GPIO_ReadPin(PORT_BUTTON_GROUP_3, PIN_BUTTON_GROUP_3)) == TRUE){
+		toggle_group(3);
+		machine_settings.is_updated = TRUE;
+	}
+
+	//case BUTTON_GROUP_4:
+	if ( validate_button_pressed (BUTTON_GROUP_4, HAL_GPIO_ReadPin(PORT_BUTTON_GROUP_4, PIN_BUTTON_GROUP_4)) == TRUE){
+		toggle_group(4);
+		machine_settings.is_updated = TRUE;
+	}
+
+	//case BUTTON_GROUP_5:
+	if ( validate_button_pressed (BUTTON_GROUP_5, HAL_GPIO_ReadPin(PORT_BUTTON_GROUP_5, PIN_BUTTON_GROUP_5)) == TRUE){
+		toggle_group(5);
+		machine_settings.is_updated = TRUE;
+	}
+
+	//case BUTTON_GROUP_6:
+	if ( validate_button_pressed (BUTTON_GROUP_6, HAL_GPIO_ReadPin(PORT_BUTTON_GROUP_6, PIN_BUTTON_GROUP_6)) == TRUE){
+		toggle_group(6);
+		machine_settings.is_updated = TRUE;
+	}
+
+	//case BUTTON_GROUP_7:
+	if ( validate_button_pressed (BUTTON_GROUP_7, HAL_GPIO_ReadPin(PORT_BUTTON_GROUP_7, PIN_BUTTON_GROUP_7)) == TRUE){
+		toggle_group(7);
+		machine_settings.is_updated = TRUE;
+	}
+
+	//case BUTTON_GROUP_8:
+	if ( validate_button_pressed (BUTTON_GROUP_8, HAL_GPIO_ReadPin(PORT_BUTTON_GROUP_8, PIN_BUTTON_GROUP_8)) == TRUE){
+		toggle_group(8);
+		machine_settings.is_updated = TRUE;
+	}
+
+	//case BUTTON_GROUP_9:
+	if ( validate_button_pressed (BUTTON_GROUP_9, HAL_GPIO_ReadPin(PORT_BUTTON_GROUP_9, PIN_BUTTON_GROUP_9)) == TRUE){
+		toggle_group(9);
+		machine_settings.is_updated = TRUE;
+	}
+
 };
 //==========================================================================================
 void mx_03_write_settings_to_eeprom(){ // STUB TODO
@@ -1644,6 +1659,7 @@ uint16_t mx_07_select_track(uint16_t next_track){
 }
 //==========================================================================================
 void xx_01_poll_adc(){
+	// called every 10ms from "TIM7_IRQHandler" from "stm32f1xx_it.c"
 	static int polltic = POLLADCTICKDEF;
 	if (polltic-- <= 0){
 		polltic = POLLADCTICKDEF;
