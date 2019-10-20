@@ -1,8 +1,8 @@
 #ifndef PIPER_DEFINE_FOR_BALABOLKA_H
 #define PIPER_DEFINE_FOR_BALABOLKA_H
 
-//#define LOGDEBUG
-//#define FULLOGDEFINE
+#define LOGDEBUG
+#define FULLOGDEFINE
 
 
 //----------------------------------------------------------------------------

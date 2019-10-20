@@ -96,8 +96,10 @@ static void MX_TIM7_Init(void);
 //	DEFINES			DEFINES			DEFINES			DEFINES			DEFINES			DEFINES					
 //============================================================================	
 #include "pip_define.h"
-
+//----------------------------------------------------------------------------
 enum BOOL {FALSE = 0, TRUE = 1};
+//----------------------------------------------------------------------------
+uint8_t thread_player_is_runing = FALSE;
 //----------------------------------------------------------------------------
 FATFS fatfs;  /* File system object for SD card logical drive */
 FIL file;     /* File object */
@@ -129,13 +131,14 @@ enum Random {NOTRANDOM, RANDOM};
 
 // PAUSE PERIODS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 enum DelayPool {DELAY_POOL_0 = 0, DELAY_POOL_1 = 1, DELAY_POOL_2 = 2, DELAY_POOL_3 = 3};
-unsigned char delay_pool_bounds[4][2] = {{10, 15}, {20, 30}, {40, 50}, {60, 70}}; 
+uint16_t delay_pool_bounds[4][2] = {{10, 15}, {20, 30}, {40, 50}, {60, 70}}; 
+//uint16_t delay_pool_bounds[4][2] = {{10, 60}, {60, 240}, {240, 600}, {600, 1800}}; 
 
 
 #define DELAY_TIMER_NO_SET 0
 enum TimePlayMode {DAY = 0, NIGHT, DAY_AND_NIGHT};
 volatile char 		is_need_play = FALSE;
-volatile static uint16_t next_track = -1;
+volatile static uint16_t next_track = 0;
 volatile uint16_t need_paly_track_number = 0;
 //----------------------------------------------------------------------------
 struct Settings {
@@ -208,6 +211,8 @@ void mx_03_write_settings_to_eeprom(void);
 void mx_04_light_leds_by_settings(void);
 char mx_05_check_light(void);
 void mx_06_light_leds_off(void);
+void mx_08_light_leds_for_shutdown_off(void);
+void mx_09_blink_power_led(void);
 uint16_t mx_07_select_track(uint16_t);
 
 void xx_01_poll_adc(void);
@@ -225,7 +230,25 @@ uint16_t fl_05_read_data(uint32_t);
 //============================================================================
 //	STATE MACHINE		STATE MACHINE		STATE MACHINE		STATE MACHINE		
 //============================================================================
-enum States {INIT, START, CHECK_BUTTONS, LIGHT_LEDS, CHECK_LIGHTS, CHECK_PLAY, SELECT_DELAY, MAKE_DELAY, SELECT_WAV, PLAY, STOP, POWER_OFF};
+enum States {INIT, START, CHECK_BUTTONS, LIGHT_LEDS, CHECK_LIGHTS, CHECK_PLAY, SELECT_DELAY, MAKE_DELAY, SELECT_WAV, PLAY, STOP, SHUTING_DOWN, POWER_OFF};
+//============================================================================
+char mx____INIT(){
+	Log("-- INIT --\n\r");
+	mx_00_machine_init();
+	//mx_04_light_leds_by_settings();	
+	pl_05_amp_on();  	
+	return START;
+}
+//============================================================================
+char mx____START(uint32_t * timer){
+	Log("-- START --\n\r");
+	//return LIGHT_LEDS;
+	//return SELECT_WAV;
+
+  *timer = 10;
+  return MAKE_DELAY;
+}
+//============================================================================
 void mx____machine_step(){ // poll every 10ms
 	//HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);	
   //static uint32_t timer = DELAY_TIMER_NO_SET;
@@ -235,20 +258,11 @@ void mx____machine_step(){ // poll every 10ms
 	
 	switch (state){
 		case INIT:
-			Log("-- INIT --\n\r");
-			mx_00_machine_init();
-		  //mx_04_light_leds_by_settings();	
-			pl_05_amp_on();  	
-			state = START;
+			state = mx____INIT();
 			break;
 		
 		case START:
-			Log("-- START --\n\r");
-			state = LIGHT_LEDS;
-			state = SELECT_WAV;
-		
-		  timer = 10;
-		  state = MAKE_DELAY;
+		  state = mx____START(&timer);
 			break;
 		
 		case CHECK_BUTTONS: 
@@ -260,8 +274,12 @@ void mx____machine_step(){ // poll every 10ms
 				static char is_power_on_lstate = FALSE;
 				
 				if (machine_settings.is_power_on == FALSE){
+					if (is_power_on_lstate == TRUE) {
+						state = SHUTING_DOWN;
+					}else{
+						state = POWER_OFF;
+					}
 					is_power_on_lstate = machine_settings.is_power_on;
-					state = POWER_OFF;
 					break;
 				}else{
 					if(is_power_on_lstate == FALSE){
@@ -415,11 +433,22 @@ void mx____machine_step(){ // poll every 10ms
 			break;
 		case STOP:
 			break;
+		case SHUTING_DOWN:
+			Log("-- SHUTING_DOWN --\n\r");
+		  is_need_play = FALSE;
+			mx_08_light_leds_for_shutdown_off();	
+		  pl_06_amp_off();
+			if (thread_player_is_runing == TRUE){
+				mx_09_blink_power_led();
+				state = SHUTING_DOWN;
+			}else{
+				mx_06_light_leds_off();	
+				state = POWER_OFF;
+			}
+		  break;
 		case POWER_OFF:
 			Log("-- POWER_OFF --\n\r");
-		  is_need_play = FALSE;
-			mx_06_light_leds_off();	
-		  pl_06_amp_off();
+		  // sleep? wait?
 			state = CHECK_BUTTONS;
 			break;
 		default:
@@ -497,6 +526,7 @@ int main(void)
   while (1)
   {
 			if (is_need_play == TRUE){
+				thread_player_is_runing = TRUE;
 				char fname[64] = {0};
 				sprintf(fname, "%04d.WAV", need_paly_track_number);
 				
@@ -510,6 +540,7 @@ int main(void)
 				is_need_play = FALSE;
 				HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2,DAC_ALIGN_12B_R, 2048);
 				HAL_DAC_Start(&hdac, DAC_CHANNEL_2);
+				thread_player_is_runing = FALSE;
 			}
   /* USER CODE END WHILE */
 
@@ -1555,6 +1586,42 @@ void mx_06_light_leds_off(){
 	HAL_GPIO_WritePin(PORT_LED_GROUP_8, PIN_LED_GROUP_8, GPIO_PIN_RESET);	
 	HAL_GPIO_WritePin(PORT_LED_GROUP_9, PIN_LED_GROUP_9, GPIO_PIN_RESET);	
 
+}
+//==========================================================================================
+void mx_08_light_leds_for_shutdown_off(){
+  HAL_GPIO_WritePin(PORT_LED_POWER, PIN_LED_POWER, GPIO_PIN_SET);	// POWER_LED_IS_ON
+	HAL_GPIO_WritePin(PORT_LED_RANDOM, PIN_LED_RANDOM, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(PORT_LED_PAUSE_0, PIN_LED_PAUSE_0, GPIO_PIN_RESET);	
+	HAL_GPIO_WritePin(PORT_LED_PAUSE_1, PIN_LED_PAUSE_1, GPIO_PIN_RESET);	
+	HAL_GPIO_WritePin(PORT_LED_PAUSE_2, PIN_LED_PAUSE_2, GPIO_PIN_RESET);	
+	HAL_GPIO_WritePin(PORT_LED_PAUSE_3, PIN_LED_PAUSE_3, GPIO_PIN_RESET);	
+	HAL_GPIO_WritePin(PORT_LED_MODE_DAY, PIN_LED_MODE_DAY, GPIO_PIN_RESET);	
+	HAL_GPIO_WritePin(PORT_LED_MODE_NIGHT, PIN_LED_MODE_NIGHT, GPIO_PIN_RESET);	
+	HAL_GPIO_WritePin(PORT_LED_MODE_DAYnNIGHT, PIN_LED_MODE_DAYnNIGHT, GPIO_PIN_RESET);	
+	HAL_GPIO_WritePin(PORT_LED_GROUP_0, PIN_LED_GROUP_0, GPIO_PIN_RESET);	
+	HAL_GPIO_WritePin(PORT_LED_GROUP_1, PIN_LED_GROUP_1, GPIO_PIN_RESET);	
+	HAL_GPIO_WritePin(PORT_LED_GROUP_2, PIN_LED_GROUP_2, GPIO_PIN_RESET);	
+	HAL_GPIO_WritePin(PORT_LED_GROUP_3, PIN_LED_GROUP_3, GPIO_PIN_RESET);	
+	HAL_GPIO_WritePin(PORT_LED_GROUP_4, PIN_LED_GROUP_4, GPIO_PIN_RESET);	
+	HAL_GPIO_WritePin(PORT_LED_GROUP_5, PIN_LED_GROUP_5, GPIO_PIN_RESET);	
+	HAL_GPIO_WritePin(PORT_LED_GROUP_6, PIN_LED_GROUP_6, GPIO_PIN_RESET);	
+	HAL_GPIO_WritePin(PORT_LED_GROUP_7, PIN_LED_GROUP_7, GPIO_PIN_RESET);	
+	HAL_GPIO_WritePin(PORT_LED_GROUP_8, PIN_LED_GROUP_8, GPIO_PIN_RESET);	
+	HAL_GPIO_WritePin(PORT_LED_GROUP_9, PIN_LED_GROUP_9, GPIO_PIN_RESET);	
+}
+//==========================================================================================
+void mx_09_blink_power_led(void){
+	static unsigned char timer = 0;
+	timer++;
+	if (timer < 30) {
+		HAL_GPIO_WritePin(PORT_LED_POWER, PIN_LED_POWER, GPIO_PIN_RESET);
+		return;
+	}
+	if (timer < 60) {
+		HAL_GPIO_WritePin(PORT_LED_POWER, PIN_LED_POWER, GPIO_PIN_SET);
+		return;
+	}
+	timer = 0;
 }
 //==========================================================================================
 uint16_t mx_07_select_track(uint16_t next_track){
